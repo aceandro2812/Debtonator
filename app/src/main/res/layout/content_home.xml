@@ -22,12 +22,13 @@
     <TextView
         android:id="@+id/textView3"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_border"
         android:gravity="bottom"
-        android:text="TextView"
+        android:text="TRANSACTIONS"
+        android:textAlignment="center"
+        android:textSize="18sp"
         app:layout_constraintHorizontal_weight="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/textView4"
@@ -36,19 +37,20 @@
     <TextView
         android:id="@+id/textView4"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_border"
         android:gravity="bottom"
-        android:text="TextView"
+        android:text="PEOPLE"
+        android:textAlignment="center"
+        android:textSize="18sp"
         app:layout_constraintHorizontal_weight="0.5"
         app:layout_constraintLeft_toRightOf="@+id/textView3"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tranSetName" />
 
     <ListView
-        android:id="@+id/personsList"
+        android:id="@+id/personList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -115,8 +117,8 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/personsList"
-        app:layout_constraintBottom_toBottomOf="@+id/personsList"
+        app:layout_constraintRight_toRightOf="@+id/personList"
+        app:layout_constraintBottom_toBottomOf="@+id/personList"
         android:layout_marginBottom="8dp" />
     <ListView
         android:id="@+id/tranList"
