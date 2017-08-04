@@ -48,6 +48,7 @@ public class AppDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("PRAGMA foreign_keys=ON;");
         db.execSQL("BEGIN TRANSACTION");
+        // People table creation sql
         String sql = "DROP TABLE IF EXISTS people_details;";
         db.execSQL(sql);
         sql = "CREATE TABLE people_details (" +
@@ -69,6 +70,28 @@ public class AppDB extends SQLiteOpenHelper {
                 "END;";
         db.execSQL(sql);
         PersonModel.insertSeeds(db);
+        // People table creation sql
+
+        // Transaction Sets creation SQL
+        sql = "DROP TABLE IF EXISTS transaction_sets;";
+        db.execSQL(sql);
+        sql = "CREATE TABLE transaction_sets (" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " `name_string` TEXT NOT NULL UNIQUE, " +
+                " `metadata` TEXT, " +
+                " `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
+                " `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP " +
+                ");";
+        db.execSQL(sql);
+        sql = "CREATE TRIGGER transaction_sets_updated_at_trigger AFTER \n" +
+                " UPDATE \n" +
+                " ON transaction_sets BEGIN \n" +
+                " UPDATE transaction_sets \n" +
+                " SET    updated_at = DATETIME('now') \n" +
+                " WHERE  id = NEW.id; \n" +
+                " END;\n";
+        db.execSQL(sql);
+        TransactionSetModel.insertSeeds(db);
         db.execSQL("COMMIT");
     }
 

@@ -10,8 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.nagasudhir.debtonator.HomeActivity"
+            android:name=".HomeActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".TransactionSetsActivity"
+            android:label="@string/title_activity_transaction_sets"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +34,7 @@
             android:name=".Person"
             android:authorities="com.example.nagasudhir.debtonator.person"
             android:exported="false" />
+
         <provider
             android:name=".TransactionSetProvider"
             android:authorities="com.example.nagasudhir.debtonator.transaction_set"

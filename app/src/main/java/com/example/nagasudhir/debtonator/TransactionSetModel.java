@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+
 /**
  * Created by Nagasudhir on 8/4/2017.
  */
@@ -26,8 +27,17 @@ public class TransactionSetModel {
      * Inserts seeds into the table
      */
     public static void insertSeeds(SQLiteDatabase db) {
-        // todo Create some rows
-
+        // Create some rows
+        TransactionSetPojo[] transactionSets = new TransactionSetPojo[2];
+        transactionSets[0] = new TransactionSetPojo("1", "First Set", "first set metadata");
+        transactionSets[1] = new TransactionSetPojo("2", "Second Set", "second set metadata");
+        for (int i = 0; i < transactionSets.length; i++) {
+            ContentValues initialValues = new ContentValues();
+            initialValues.put(KEY_ROW_ID, transactionSets[i].getId());
+            initialValues.put(KEY_NAME_STRING, transactionSets[i].getNameString());
+            initialValues.put(KEY_METADATA, transactionSets[i].getMetadata());
+            db.insert(TABLE_NAME, null, initialValues);
+        }
     }
 
     /**

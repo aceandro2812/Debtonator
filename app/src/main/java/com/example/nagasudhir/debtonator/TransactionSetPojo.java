@@ -10,7 +10,8 @@ public class TransactionSetPojo {
     String metadata = null;
     String created_at = null;
 
-    public TransactionSetPojo(String nameString, String metadata) {
+    public TransactionSetPojo(String id, String nameString, String metadata) {
+        this.id = id;
         this.nameString = nameString;
         this.metadata = metadata;
     }
