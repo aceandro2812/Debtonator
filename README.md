@@ -1,7 +1,8 @@
 ## Todos
-* Application settings storage decision and implementation - priority and cant move forward without this
-* Create POJO, model, content Provider for TransactionSets table
-* Transaction details model seeds function 
+* Transaction Set and Person Model update, delete throwing errors, catch these to avoid app crash -- important
+* Application settings storage decision -- done, using sharedPreferences
+* Create POJO, model, content Provider for TransactionSets table -- done
+* Transaction details model seeds function --done
 * Additional functions in Transaction details model
 
 ## Links

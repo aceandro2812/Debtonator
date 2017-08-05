@@ -71,14 +71,14 @@ public class TransactionSetModel {
     /**
      * Updates a transaction in the table
      */
-    public static long updateTransactionSet(SQLiteDatabase db, ContentValues values, String selection, String[] selectionArgs) {
+    public static int updateTransactionSet(SQLiteDatabase db, ContentValues values, String selection, String[] selectionArgs) {
         return db.update(TABLE_NAME, values, selection, selectionArgs);
     }
 
     /**
      * Deletes a transaction in the table
      */
-    public static long deleteTransactionSet(SQLiteDatabase db, String selection, String[] selectionArgs) {
+    public static int deleteTransactionSet(SQLiteDatabase db, String selection, String[] selectionArgs) {
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 }
