@@ -3,7 +3,9 @@ package com.example.nagasudhir.debtonator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -28,6 +31,7 @@ public class HomeActivity extends AppCompatActivity
     ListView mPersonsListView;
     SimpleCursorAdapter mPersonsAdapter;
     String mTransactionSetId = null;
+    String mTranSetName = null;
     SharedPreferences mSharedPrefs;
 
     @Override
@@ -76,6 +80,9 @@ public class HomeActivity extends AppCompatActivity
         /* Creating a loader for populating listview from sqlite database */
         /* This statement, invokes the method onCreatedLoader() */
         getSupportLoaderManager().initLoader(0, null, this);
+
+        // Create Object and call AsyncTask execute Method
+        new LongOperation().execute();
     }
 
     /*
@@ -147,6 +154,43 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // Class with extends AsyncTask class
+    private class LongOperation extends AsyncTask<String, Void, Void> {
+        protected void onPreExecute() {
+            // NOTE: You can call UI Element here.
+
+        }
+
+        // Call after onPreExecute method
+        protected Void doInBackground(String... urls) {
+            try {
+                // Call long running operations here (perform background computation)
+                // NOTE: Don't call UI Element here.
+                Cursor transactionSetCursor = HomeActivity.this.getContentResolver().query(Uri.parse(TransactionSetProvider.CONTENT_URI + "/" + mTransactionSetId), null, null, null, null);
+                try {
+                    while (transactionSetCursor.moveToNext()) {
+                        mTranSetName = transactionSetCursor.getString(transactionSetCursor.getColumnIndex(TransactionSetModel.KEY_NAME_STRING));
+                    }
+                } finally {
+                    transactionSetCursor.close();
+                }
+
+            } catch (SQLException e) {
+
+            } catch (Exception e) {
+
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(Void unused) {
+            // NOTE: You can call UI Element here.
+            //todo get cursor and do stuff
+            ((TextView) findViewById(R.id.tranSetName)).setText(mTranSetName);
+        }
     }
 
     /**
