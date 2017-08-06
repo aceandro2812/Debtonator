@@ -61,6 +61,12 @@ public class TransactionSetsActivity extends AppCompatActivity
 
         sharedpreferences = getSharedPreferences(GlobalVarClass.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
 
+        // Get the transaction set Id to load from shared preferences
+        String loadedTransactionSetId = sharedpreferences.getString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, null);
+        if (loadedTransactionSetId != null) {
+            homeBtn(null);
+        }
+
         // Setting up Context that can used for listener and other stuff
         //mContext = this;
 
@@ -166,10 +172,8 @@ public class TransactionSetsActivity extends AppCompatActivity
         // set the shared preferences to set the transaction set to be opened
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, rowId);
-        editor.commit();
-        // starts a new Intent to open home page
-        Intent HomePageIntent = new Intent(getBaseContext(), HomeActivity.class);
-        startActivity(HomePageIntent);
+        editor.apply();
+        homeBtn(null);
     }
 
     /*
@@ -202,6 +206,7 @@ public class TransactionSetsActivity extends AppCompatActivity
         // starts a new Intent to open home page
         Intent HomePageIntent = new Intent(getBaseContext(), HomeActivity.class);
         startActivity(HomePageIntent);
+        finish();
     }
 
     @Override
@@ -210,7 +215,7 @@ public class TransactionSetsActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            homeBtn(null);
         }
     }
 

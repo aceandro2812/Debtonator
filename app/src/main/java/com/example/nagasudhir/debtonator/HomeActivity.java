@@ -1,5 +1,7 @@
 package com.example.nagasudhir.debtonator;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ public class HomeActivity extends AppCompatActivity
 
     ListView mPersonsListView;
     SimpleCursorAdapter mPersonsAdapter;
+    String mTransactionSetId = null;
+    SharedPreferences mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,13 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Get the transaction set Id to load from shared preferences
+        mSharedPrefs = getSharedPreferences(GlobalVarClass.SHARED_PREFS_KEY, MODE_PRIVATE);
+        mTransactionSetId = mSharedPrefs.getString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, null);
+        if (mTransactionSetId == null) {
+            loadTranSetsBtn(null);
+        }
 
         // Setting up the person list
         mPersonsListView = (ListView) findViewById(R.id.personList);
@@ -65,6 +76,20 @@ public class HomeActivity extends AppCompatActivity
         /* Creating a loader for populating listview from sqlite database */
         /* This statement, invokes the method onCreatedLoader() */
         getSupportLoaderManager().initLoader(0, null, this);
+    }
+
+    /*
+    * Load the TransactionSets Activity button
+    * */
+    public void loadTranSetsBtn(View v) {
+        //Make loaded transaction Id as null
+        SharedPreferences.Editor editor = mSharedPrefs.edit();
+        editor.putString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, null);
+        editor.apply();
+        // Finish this activity and start the Transaction Set List Displaying Activity
+        Intent TransactionSetsDisplayIntent = new Intent(getBaseContext(), TransactionSetsActivity.class);
+        startActivity(TransactionSetsDisplayIntent);
+        finish();
     }
 
     @Override
