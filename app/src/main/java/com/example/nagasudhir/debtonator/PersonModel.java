@@ -98,14 +98,14 @@ public class PersonModel {
      * Creates a the person in the table
      */
     public static long insertPerson(SQLiteDatabase db, ContentValues values) {
-        return db.insert(TABLE_NAME, null, values);
+        return db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     /**
      * Updates a person in the table
      */
     public static long updatePerson(SQLiteDatabase db, ContentValues values, String selection, String[] selectionArgs) {
-        return db.update(TABLE_NAME, values, selection, selectionArgs);
+        return db.updateWithOnConflict(TABLE_NAME, values, selection, selectionArgs, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     /**

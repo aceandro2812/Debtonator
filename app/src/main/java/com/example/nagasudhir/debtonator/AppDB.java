@@ -59,7 +59,7 @@ public class AppDB extends SQLiteOpenHelper {
                 "`metadata` TEXT," +
                 "`created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP," +
                 "`updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP" +
-                ");";
+                ")";
         db.execSQL(sql);
         sql = "CREATE TRIGGER people_details_updated_at_trigger AFTER \n" +
                 "  UPDATE \n" +
@@ -67,13 +67,13 @@ public class AppDB extends SQLiteOpenHelper {
                 "  UPDATE people_details \n" +
                 "  SET    updated_at = DATETIME('now') \n" +
                 "  WHERE  id = NEW.id; \n" +
-                "END;";
+                "END";
         db.execSQL(sql);
         PersonModel.insertSeeds(db);
         // People table creation sql
 
         // Transaction Sets creation SQL
-        sql = "DROP TABLE IF EXISTS transaction_sets;";
+        sql = "DROP TABLE IF EXISTS transaction_sets";
         db.execSQL(sql);
         sql = "CREATE TABLE transaction_sets (" +
                 " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -81,7 +81,7 @@ public class AppDB extends SQLiteOpenHelper {
                 " `metadata` TEXT, " +
                 " `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
                 " `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP " +
-                ");";
+                ")";
         db.execSQL(sql);
         sql = "CREATE TRIGGER transaction_sets_updated_at_trigger AFTER \n" +
                 " UPDATE \n" +
@@ -89,7 +89,7 @@ public class AppDB extends SQLiteOpenHelper {
                 " UPDATE transaction_sets \n" +
                 " SET    updated_at = DATETIME('now') \n" +
                 " WHERE  id = NEW.id; \n" +
-                " END;\n";
+                " END";
         db.execSQL(sql);
         TransactionSetModel.insertSeeds(db);
         db.execSQL("COMMIT");

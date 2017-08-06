@@ -57,14 +57,14 @@ public class TransactionModel {
      * Creates a the transaction in the table
      */
     public static long insertTransaction(SQLiteDatabase db, ContentValues values) {
-        return db.insert(TABLE_NAME, null, values);
+        return db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     /**
      * Updates a transaction in the table
      */
     public static long updateTransaction(SQLiteDatabase db, ContentValues values, String selection, String[] selectionArgs) {
-        return db.update(TABLE_NAME, values, selection, selectionArgs);
+        return db.updateWithOnConflict(TABLE_NAME, values, selection, selectionArgs, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     /**

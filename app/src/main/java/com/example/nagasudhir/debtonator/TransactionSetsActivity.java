@@ -1,7 +1,10 @@
 package com.example.nagasudhir.debtonator;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -37,6 +40,7 @@ public class TransactionSetsActivity extends AppCompatActivity
     ListView mTranSetsListView;
     SimpleCursorAdapter mTranSetsAdapter;
     static final String DEFAULT_NEW_TRAN_SET_NAME = "Transaction Set";
+    SharedPreferences sharedpreferences;
     //Context mContext = null;
 
     @Override
@@ -54,6 +58,8 @@ public class TransactionSetsActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        sharedpreferences = getSharedPreferences(GlobalVarClass.SHARED_PREFS_KEY, Context.MODE_PRIVATE);
 
         // Setting up Context that can used for listener and other stuff
         //mContext = this;
@@ -152,6 +158,21 @@ public class TransactionSetsActivity extends AppCompatActivity
     }
 
     /*
+    * Load a Transaction Set Button Listener
+    * */
+    public void loadTranSetBtn(View v) {
+        final String rowId = ((TextView) ((ViewGroup) v.getParent()).findViewById(R.id.tran_set_id)).getText().toString();
+        final String tranSetName = ((TextView) ((ViewGroup) v.getParent()).findViewById(R.id.tran_set_name)).getText().toString();
+        // set the shared preferences to set the transaction set to be opened
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, rowId);
+        editor.commit();
+        // starts a new Intent to open home page
+        Intent HomePageIntent = new Intent(getBaseContext(), HomeActivity.class);
+        startActivity(HomePageIntent);
+    }
+
+    /*
     * Delete a Transaction Set Button Listener
     * */
     public void deleteTranSetBtn(View v) {
@@ -172,6 +193,15 @@ public class TransactionSetsActivity extends AppCompatActivity
                         }
                     }
                 }).create().show();
+    }
+
+    /*
+    * When the 'home' button is clicked
+    * */
+    public void homeBtn(View v) {
+        // starts a new Intent to open home page
+        Intent HomePageIntent = new Intent(getBaseContext(), HomeActivity.class);
+        startActivity(HomePageIntent);
     }
 
     @Override
