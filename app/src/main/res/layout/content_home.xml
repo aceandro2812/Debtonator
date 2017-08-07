@@ -73,17 +73,20 @@
         android:text="LOAD"
         app:layout_constraintLeft_toRightOf="@+id/button3"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button3" />
+        app:layout_constraintTop_toTopOf="@+id/button3"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="8dp" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:text="Button"
+        android:text="LOAD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/button3" />
+        app:layout_constraintRight_toLeftOf="@+id/button3"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/button3"
@@ -93,34 +96,34 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:text="Button"
+        android:text="Summary"
         app:layout_constraintLeft_toRightOf="@+id/button2"
         app:layout_constraintRight_toLeftOf="@+id/load_tran_sets_btn"
         app:layout_constraintTop_toTopOf="@+id/button2" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_trans"
+        android:id="@+id/fab_add_tran"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/tranList"
         app:layout_constraintBottom_toBottomOf="@+id/tranList"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintRight_toRightOf="@+id/tranList"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_person"
+        android:id="@+id/fab_manage_persons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/personList"
         app:layout_constraintBottom_toBottomOf="@+id/personList"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintRight_toRightOf="@+id/personList"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
     <ListView
         android:id="@+id/tranList"
         android:layout_width="0dp"

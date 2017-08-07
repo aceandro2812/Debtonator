@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity
 
         mPersonsListView.setAdapter(mPersonsAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_person);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_manage_persons);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,7 +170,7 @@ public class HomeActivity extends AppCompatActivity
                 // NOTE: Don't call UI Element here.
                 Cursor transactionSetCursor = HomeActivity.this.getContentResolver().query(Uri.parse(TransactionSetProvider.CONTENT_URI + "/" + mTransactionSetId), null, null, null, null);
                 try {
-                    while (transactionSetCursor.moveToNext()) {
+                    if (transactionSetCursor.moveToNext()) {
                         mTranSetName = transactionSetCursor.getString(transactionSetCursor.getColumnIndex(TransactionSetModel.KEY_NAME_STRING));
                     }
                 } finally {
@@ -197,10 +197,13 @@ public class HomeActivity extends AppCompatActivity
      * A callback method invoked by the loader when initLoader() is called
      */
     @Override
-    public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-        // todo filter loader by arg0
-        Uri uri = Person.CONTENT_URI;
-        return new CursorLoader(this, uri, null, null, null, null);
+    public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+        // todo filter loader by id
+        if (id == 0) {
+            Uri uri = Person.CONTENT_URI;
+            return new CursorLoader(this, uri, null, null, null, null);
+        }
+        return null;
     }
 
     /**
@@ -208,11 +211,15 @@ public class HomeActivity extends AppCompatActivity
      */
     @Override
     public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
-        mPersonsAdapter.swapCursor(arg1);
+        if (arg0.getId() == 0) {
+            mPersonsAdapter.swapCursor(arg1);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> arg0) {
-        mPersonsAdapter.swapCursor(null);
+        if (arg0.getId() == 0) {
+            mPersonsAdapter.swapCursor(null);
+        }
     }
 }

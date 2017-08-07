@@ -173,7 +173,12 @@ public class TransactionSetsActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Editable value = input.getText();
                         ContentValues updatedValues = new ContentValues();
-                        updatedValues.put(TransactionSetModel.KEY_NAME_STRING, value.toString());
+                        String renamedString = value.toString().trim();
+                        if (renamedString.equals("")) {
+                            Toast.makeText(getApplicationContext(), "Empty Name Not Allowed...", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        updatedValues.put(TransactionSetModel.KEY_NAME_STRING, renamedString);
                         //int numUpdatedRows = TransactionSetModel.updateTransactionSet(new AppDB(getApplicationContext()).getWritableDB(), updatedValues, "id=?", new String[]{rowId});
                         int numUpdatedRows = TransactionSetsActivity.this.getContentResolver().update(TransactionSetProvider.CONTENT_URI, updatedValues, "id=?", new String[]{rowId});
                         if (numUpdatedRows > 0) {
