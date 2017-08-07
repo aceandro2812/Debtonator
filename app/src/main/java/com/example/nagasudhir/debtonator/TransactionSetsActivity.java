@@ -102,6 +102,7 @@ public class TransactionSetsActivity extends AppCompatActivity
             try {
                 // Call long running operations here (perform background computation)
                 // NOTE: Don't call UI Element here.
+                mTranSetNamesList = new ArrayList<String>();
                 Cursor transactionSetCursor = TransactionSetsActivity.this.getContentResolver().query(TransactionSetProvider.CONTENT_URI, null, null, null, null);
                 try {
                     while (transactionSetCursor.moveToNext()) {
@@ -146,6 +147,7 @@ public class TransactionSetsActivity extends AppCompatActivity
                         if (insertRowId > 0) {
                             Toast.makeText(getApplicationContext(), "New Transaction Set Created!", Toast.LENGTH_SHORT).show();
                             getSupportLoaderManager().restartLoader(0, null, TransactionSetsActivity.this);
+                            new LongOperation().execute();
                         } else {
                             Toast.makeText(getApplicationContext(), "Transaction Set NOT created. May be due to duplicate Name", Toast.LENGTH_SHORT).show();
                             ((Button) v).callOnClick();
@@ -177,6 +179,7 @@ public class TransactionSetsActivity extends AppCompatActivity
                         if (numUpdatedRows > 0) {
                             Toast.makeText(getApplicationContext(), "Transaction Set Renamed!", Toast.LENGTH_SHORT).show();
                             getSupportLoaderManager().restartLoader(0, null, TransactionSetsActivity.this);
+                            new LongOperation().execute();
                         } else {
                             Toast.makeText(getApplicationContext(), "Transaction Set NOT Renamed...", Toast.LENGTH_SHORT).show();
                         }
@@ -218,6 +221,7 @@ public class TransactionSetsActivity extends AppCompatActivity
                         if (numAffectedRows > 0) {
                             Toast.makeText(getApplicationContext(), "Transaction Set Deleted!", Toast.LENGTH_SHORT).show();
                             getSupportLoaderManager().restartLoader(0, null, TransactionSetsActivity.this);
+                            new LongOperation().execute();
                         } else {
                             Toast.makeText(getApplicationContext(), "No Transaction Set is deleted...", Toast.LENGTH_SHORT).show();
                         }
