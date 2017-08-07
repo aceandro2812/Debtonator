@@ -74,7 +74,7 @@ public class TransactionSetProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (uriMatcher.match(uri) == TRANSACTION_SET_BY_NAME) {
             return (int) TransactionSetModel.deleteTransactionSet(mAppDB, "name_string=?", selectionArgs);
-        } else if (uriMatcher.match(uri) == TRANSACTION_SET) {
+        } else if (uriMatcher.match(uri) == TRANSACTION_SETS || uriMatcher.match(uri) == TRANSACTION_SET) {
             return (int) TransactionSetModel.deleteTransactionSet(mAppDB, "id=?", selectionArgs);
         }
         return 0;

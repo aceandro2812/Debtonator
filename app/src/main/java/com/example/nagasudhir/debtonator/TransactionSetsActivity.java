@@ -6,8 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.SQLException;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager;
@@ -41,6 +42,7 @@ public class TransactionSetsActivity extends AppCompatActivity
     SimpleCursorAdapter mTranSetsAdapter;
     static final String DEFAULT_NEW_TRAN_SET_NAME = "Transaction Set";
     SharedPreferences sharedpreferences;
+    ArrayList<String> mTranSetNamesList = new ArrayList<String>();
     //Context mContext = null;
 
     @Override
@@ -84,26 +86,48 @@ public class TransactionSetsActivity extends AppCompatActivity
         /* Creating a loader for populating listview from sqlite database */
         /* This statement, invokes the method onCreatedLoader() */
         getSupportLoaderManager().initLoader(0, null, this);
+
+        // Create Object and call AsyncTask execute Method
+        new LongOperation().execute();
+    }
+
+    // Class with extends AsyncTask class
+    private class LongOperation extends AsyncTask<String, Void, Void> {
+        protected void onPreExecute() {
+            // NOTE: You can call UI Element here.
+        }
+
+        // Call after onPreExecute method
+        protected Void doInBackground(String... urls) {
+            try {
+                // Call long running operations here (perform background computation)
+                // NOTE: Don't call UI Element here.
+                Cursor transactionSetCursor = TransactionSetsActivity.this.getContentResolver().query(TransactionSetProvider.CONTENT_URI, null, null, null, null);
+                try {
+                    while (transactionSetCursor.moveToNext()) {
+                        mTranSetNamesList.add(transactionSetCursor.getString(transactionSetCursor.getColumnIndex(TransactionSetModel.KEY_NAME_STRING)));
+                    }
+                } finally {
+                    transactionSetCursor.close();
+                }
+
+            } catch (SQLException e) {
+
+            } catch (Exception e) {
+
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void unused) {
+            // NOTE: You can call UI Element here.
+        }
     }
 
     /*
     * Create a Transaction Set Button Listener
     * */
     public void createTranSetBtn(final View v) {
-        final SQLiteDatabase db = new AppDB(getApplicationContext()).getWritableDB();
-        // get all the transaction set names start
-        final ArrayList<String> allSetsNames = new ArrayList<String>();
-        Cursor allSetsCursor = TransactionSetModel.getAllTransactionSets(db);
-        try {
-            while (allSetsCursor.moveToNext()) {
-                allSetsNames.add(allSetsCursor.getString(allSetsCursor.getColumnIndex(TransactionSetModel.KEY_NAME_STRING)));
-            }
-        } finally {
-            allSetsCursor.close();
-        }
-        // Saving space
-        allSetsCursor = null;
-        // get all the transaction set names end
         final EditText input = new EditText(this);
         input.setText("");
         input.setSingleLine();
@@ -115,11 +139,11 @@ public class TransactionSetsActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Editable value = input.getText();
                         String newName = value.toString();
-                        newName = createNonConflictName(newName, allSetsNames, DEFAULT_NEW_TRAN_SET_NAME, 10000);
+                        newName = createNonConflictName(newName, mTranSetNamesList, DEFAULT_NEW_TRAN_SET_NAME, 10000);
                         ContentValues insertValues = new ContentValues();
                         insertValues.put(TransactionSetModel.KEY_NAME_STRING, newName);
-                        long insertRowId = TransactionSetModel.insertTransactionSet(db, insertValues);
-                        if (insertRowId != -1) {
+                        long insertRowId = Long.parseLong(TransactionSetsActivity.this.getContentResolver().insert(TransactionSetProvider.CONTENT_URI, insertValues).getLastPathSegment());
+                        if (insertRowId > 0) {
                             Toast.makeText(getApplicationContext(), "New Transaction Set Created!", Toast.LENGTH_SHORT).show();
                             getSupportLoaderManager().restartLoader(0, null, TransactionSetsActivity.this);
                         } else {
@@ -148,7 +172,8 @@ public class TransactionSetsActivity extends AppCompatActivity
                         Editable value = input.getText();
                         ContentValues updatedValues = new ContentValues();
                         updatedValues.put(TransactionSetModel.KEY_NAME_STRING, value.toString());
-                        int numUpdatedRows = TransactionSetModel.updateTransactionSet(new AppDB(getApplicationContext()).getWritableDB(), updatedValues, "id=?", new String[]{rowId});
+                        //int numUpdatedRows = TransactionSetModel.updateTransactionSet(new AppDB(getApplicationContext()).getWritableDB(), updatedValues, "id=?", new String[]{rowId});
+                        int numUpdatedRows = TransactionSetsActivity.this.getContentResolver().update(TransactionSetProvider.CONTENT_URI, updatedValues, "id=?", new String[]{rowId});
                         if (numUpdatedRows > 0) {
                             Toast.makeText(getApplicationContext(), "Transaction Set Renamed!", Toast.LENGTH_SHORT).show();
                             getSupportLoaderManager().restartLoader(0, null, TransactionSetsActivity.this);
@@ -188,8 +213,9 @@ public class TransactionSetsActivity extends AppCompatActivity
                 .setNegativeButton("CANCEL", null)
                 .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
-                        int numUpdatedRows = TransactionSetModel.deleteTransactionSet(new AppDB(getApplicationContext()).getWritableDB(), "id=?", new String[]{rowId});
-                        if (numUpdatedRows > 0) {
+                        //int numAffectedRows = TransactionSetModel.deleteTransactionSet(new AppDB(getApplicationContext()).getWritableDB(), "id=?", new String[]{rowId});
+                        int numAffectedRows = TransactionSetsActivity.this.getContentResolver().delete(TransactionSetProvider.CONTENT_URI, "id=?", new String[]{rowId});
+                        if (numAffectedRows > 0) {
                             Toast.makeText(getApplicationContext(), "Transaction Set Deleted!", Toast.LENGTH_SHORT).show();
                             getSupportLoaderManager().restartLoader(0, null, TransactionSetsActivity.this);
                         } else {
