@@ -32,9 +32,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-import static com.example.nagasudhir.debtonator.TransactionSetModel.KEY_NAME_STRING;
 
 public class TransactionSetsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -78,8 +81,38 @@ public class TransactionSetsActivity extends AppCompatActivity
         mTranSetsAdapter = new SimpleCursorAdapter(getBaseContext(),
                 R.layout.activity_transaction_sets_list_item,
                 null,
-                new String[]{KEY_NAME_STRING, TransactionSetModel.KEY_ROW_ID},
-                new int[]{R.id.tran_set_name, R.id.tran_set_id}, 0);
+                new String[]{TransactionSetModel.KEY_NAME_STRING, TransactionSetModel.KEY_ROW_ID, TransactionSetModel.VARIABLE_FROM_DATE, TransactionSetModel.VARIABLE_TO_DATE, TransactionSetModel.VARIABLE_WORTH},
+                new int[]{R.id.tran_set_name, R.id.tran_set_id, R.id.tran_set_from_date, R.id.tran_set_to_date, R.id.tran_set_worth}, 0);
+
+        mTranSetsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+
+                if (columnIndex == cursor.getColumnIndex(TransactionSetModel.VARIABLE_WORTH)) {
+                    TextView textView = (TextView) view;
+                    textView.setText(NumberFormat.getNumberInstance().format(cursor.getDouble(columnIndex)));
+                    return true;
+                } else if (columnIndex == cursor.getColumnIndex(TransactionSetModel.VARIABLE_FROM_DATE) || columnIndex == cursor.getColumnIndex(TransactionSetModel.VARIABLE_TO_DATE)) {
+                    TextView textView = (TextView) view;
+                    String dateString = cursor.getString(columnIndex);
+
+                    String originalStringFormat = "yyyy-MM-dd HH:mm:ss";
+                    String desiredStringFormat = "dd/MM/yyyy";
+
+                    SimpleDateFormat readingFormat = new SimpleDateFormat(originalStringFormat);
+                    SimpleDateFormat outputFormat = new SimpleDateFormat(desiredStringFormat);
+
+                    try {
+                        Date date = readingFormat.parse(dateString);
+                        textView.setText(outputFormat.format(date));
+                    } catch (ParseException e) {
+                        textView.setText(dateString);
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         mTranSetsListView.setAdapter(mTranSetsAdapter);
 
@@ -326,7 +359,6 @@ public class TransactionSetsActivity extends AppCompatActivity
      */
     @Override
     public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-        // todo filter loader by arg0
         Uri uri = TransactionSetProvider.CONTENT_URI;
         return new CursorLoader(this, uri, null, null, null, null);
     }

@@ -18,6 +18,10 @@ public class TransactionSetModel {
     public static final String KEY_METADATA = "metadata";
     public static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_UPDATED_AT = "updated_at";
+    public static final String VARIABLE_FROM_DATE = "min_time";
+    public static final String VARIABLE_TO_DATE = "max_time";
+    public static final String VARIABLE_WORTH = "tran_set_worth";
+
     /**
      * A constant, stores the the table name
      */
@@ -44,7 +48,20 @@ public class TransactionSetModel {
      * Returns all the transaction_sets in the table
      */
     public static Cursor getAllTransactionSets(SQLiteDatabase db) {
-        return db.rawQuery("SELECT id AS _id, * FROM transaction_sets;", null);
+        return db.rawQuery("SELECT transaction_sets.id as _id, transaction_sets.*, \n" +
+                "MAX(transactions_details_summary.transaction_time) AS max_time, \n" +
+                "MIN(transactions_details_summary.transaction_time) AS min_time, \n" +
+                "SUM(transactions_details_summary.tran_contribution_sum) AS tran_set_worth \n" +
+                "FROM transaction_sets \n" +
+                "LEFT OUTER JOIN \n" +
+                "(SELECT transactions_details.*, SUM(transation_contributions.contribution) AS tran_contribution_sum \n" +
+                "FROM transactions_details \n" +
+                "LEFT OUTER JOIN \n" +
+                "transation_contributions ON transation_contributions.transactions_details_id = transactions_details.id\n" +
+                "GROUP BY transactions_details.id \n" +
+                " ) AS transactions_details_summary \n" +
+                "ON transaction_sets.id = transactions_details_summary.transaction_sets_id \n" +
+                "GROUP BY transaction_sets.id;", null);
     }
 
     /**

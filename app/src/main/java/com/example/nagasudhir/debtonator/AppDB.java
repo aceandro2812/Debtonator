@@ -238,10 +238,10 @@ public class AppDB extends SQLiteOpenHelper {
                 "INSERT INTO `transactions_details` VALUES (1,1,'electricity bill','elec bill','2017-06-28 17:14:59','2017-06-27 18:16:04','2017-06-27 18:16:04');\n" +
                 "INSERT INTO `transactions_details` VALUES (2,1,'debt','sudhir to naveen','2017-06-28 17:14:59','2017-06-28 16:46:31','2017-06-28 16:46:31');\n" +
                 "INSERT INTO `transactions_details` VALUES (3,1,'trip','trip to mars','2017-06-28 17:14:59','2017-06-28 16:46:49','2017-06-28 16:46:49');\n" +
-                "INSERT INTO `transactions_details` VALUES (6,2,'rice','rice for roommates','2017-07-01 15:15:09','2017-07-01 15:15:09','2017-07-01 15:15:09');\n" +
-                "INSERT INTO `transactions_details` VALUES (7,2,'pasta','just for fun','2017-08-08 15:06:23','2017-08-08 15:06:23','2017-08-08 15:06:23');\n" +
-                "INSERT INTO `transactions_details` VALUES (8,2,'biriyani','party by kishore','2017-08-08 15:06:56','2017-08-08 15:06:56','2017-08-08 15:06:56');\n" +
-                "INSERT INTO `transactions_details` VALUES (9,2,'groceries',NULL,'2017-08-08 15:07:26','2017-08-08 15:07:26','2017-08-08 15:07:26');\n" +
+                "INSERT INTO `transactions_details` VALUES (6,3,'rice','rice for roommates','2017-07-01 15:15:09','2017-07-01 15:15:09','2017-07-01 15:15:09');\n" +
+                "INSERT INTO `transactions_details` VALUES (7,3,'pasta','just for fun','2017-08-08 15:06:23','2017-08-08 15:06:23','2017-08-08 15:06:23');\n" +
+                "INSERT INTO `transactions_details` VALUES (8,3,'biriyani','party by kishore','2017-08-08 15:06:56','2017-08-08 15:06:56','2017-08-08 15:06:56');\n" +
+                "INSERT INTO `transactions_details` VALUES (9,3,'groceries',NULL,'2017-08-08 15:07:26','2017-08-08 15:07:26','2017-08-08 15:07:26');\n" +
                 "INSERT INTO `transaction_tags` VALUES (1,'mandatory',1,'2017-08-08 15:28:26');\n" +
                 "INSERT INTO `transaction_tags` VALUES (2,'room',1,'2017-08-08 15:28:44');\n" +
                 "INSERT INTO `transaction_tags` VALUES (3,'debt',2,'2017-08-08 15:29:02');\n" +
