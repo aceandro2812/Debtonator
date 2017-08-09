@@ -25,11 +25,16 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    ListView mPersonsListView;
-    SimpleCursorAdapter mPersonsAdapter;
+    ListView mPersonsListView, mTransactionsListView;
+    SimpleCursorAdapter mPersonsAdapter, mTransactionsAdapter;
     String mTransactionSetId = null;
     String mTranSetName = null;
     SharedPreferences mSharedPrefs;
@@ -48,6 +53,46 @@ public class HomeActivity extends AppCompatActivity
             loadTranSetsBtn(null);
         }
 
+        // Setting up the Transactions list
+        mTransactionsListView = (ListView) findViewById(R.id.tranList);
+
+        mTransactionsAdapter = new SimpleCursorAdapter(getBaseContext(),
+                R.layout.activity_home_transaction_list_item_layout,
+                null,
+                new String[]{"_id", TransactionModel.KEY_DESCRIPTION, TransactionModel.KEY_TRANSACTION_TIME, TransactionModel.KEY_METADATA, TransactionModel.VARIABLE_TRANSACTION_PEOPLE, TransactionModel.VARIABLE_TRANSACTION_SUM},
+                new int[]{R.id.tran_id, R.id.tran_description, R.id.tran_time, R.id.tran_metadata, R.id.tran_people, R.id.tran_sum}, 0);
+
+        mTransactionsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+
+                if (columnIndex == cursor.getColumnIndex(TransactionModel.VARIABLE_TRANSACTION_SUM)) {
+                    TextView textView = (TextView) view;
+                    textView.setText(NumberFormat.getNumberInstance().format(cursor.getDouble(columnIndex)));
+                    return true;
+                } else if (columnIndex == cursor.getColumnIndex(TransactionModel.KEY_TRANSACTION_TIME)) {
+                    TextView textView = (TextView) view;
+                    String dateString = cursor.getString(columnIndex);
+
+                    String originalStringFormat = "yyyy-MM-dd HH:mm:ss";
+                    String desiredStringFormat = "dd/MM/yyyy HH:mm";
+
+                    SimpleDateFormat readingFormat = new SimpleDateFormat(originalStringFormat);
+                    SimpleDateFormat outputFormat = new SimpleDateFormat(desiredStringFormat);
+
+                    try {
+                        Date date = readingFormat.parse(dateString);
+                        textView.setText(outputFormat.format(date));
+                    } catch (ParseException e) {
+                        textView.setText(dateString);
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        mTransactionsListView.setAdapter(mTransactionsAdapter);
+
         // Setting up the person list
         mPersonsListView = (ListView) findViewById(R.id.personList);
 
@@ -55,7 +100,7 @@ public class HomeActivity extends AppCompatActivity
                 R.layout.activity_home_person_list_item_layout,
                 null,
                 new String[]{PersonModel.KEY_USERNAME, PersonModel.KEY_EMAIL_ID, PersonModel.KEY_PHONE_NUMBER},
-                new int[]{R.id.person_name, R.id.person_email, R.id.person_phone}, 0);
+                new int[]{R.id.tran_description, R.id.person_email, R.id.tran_people}, 0);
 
         mPersonsListView.setAdapter(mPersonsAdapter);
 
@@ -80,6 +125,7 @@ public class HomeActivity extends AppCompatActivity
         /* Creating a loader for populating listview from sqlite database */
         /* This statement, invokes the method onCreatedLoader() */
         getSupportLoaderManager().initLoader(0, null, this);
+        getSupportLoaderManager().initLoader(1, null, this);
 
         // Create Object and call AsyncTask execute Method
         new LongOperation().execute();
@@ -188,7 +234,6 @@ public class HomeActivity extends AppCompatActivity
 
         protected void onPostExecute(Void unused) {
             // NOTE: You can call UI Element here.
-            //todo get cursor and do stuff
             ((TextView) findViewById(R.id.tranSetName)).setText(mTranSetName);
         }
     }
@@ -198,9 +243,11 @@ public class HomeActivity extends AppCompatActivity
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-        // todo filter loader by id
         if (id == 0) {
             Uri uri = Person.CONTENT_URI;
+            return new CursorLoader(this, uri, null, null, null, null);
+        } else if (id == 1) {
+            Uri uri = Uri.parse(TransactionProvider.CONTENT_URI + "/by_transaction_set/" + mTransactionSetId);
             return new CursorLoader(this, uri, null, null, null, null);
         }
         return null;
@@ -213,6 +260,8 @@ public class HomeActivity extends AppCompatActivity
     public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
         if (arg0.getId() == 0) {
             mPersonsAdapter.swapCursor(arg1);
+        } else if (arg0.getId() == 1) {
+            mTransactionsAdapter.swapCursor(arg1);
         }
     }
 
@@ -220,6 +269,8 @@ public class HomeActivity extends AppCompatActivity
     public void onLoaderReset(Loader<Cursor> arg0) {
         if (arg0.getId() == 0) {
             mPersonsAdapter.swapCursor(null);
+        } else if (arg0.getId() == 1) {
+            mTransactionsAdapter.swapCursor(null);
         }
     }
 }

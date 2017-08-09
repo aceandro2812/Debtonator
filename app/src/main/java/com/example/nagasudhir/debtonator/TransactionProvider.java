@@ -64,7 +64,7 @@ public class TransactionProvider extends ContentProvider {
         } else if (uriMatcher.match(uri) == TRANSACTION) {
             return TransactionModel.getTransactionById(mAppDB, uri.getLastPathSegment());
         } else if (uriMatcher.match(uri) == TRANSACTION_BY_SET) {
-            return TransactionModel.getTransactionByTransactionSetId(mAppDB, uri.getLastPathSegment());
+            return TransactionModel.getTransactionByTransactionSetIdInDetail(mAppDB, uri.getLastPathSegment());
         } else {
             return null;
         }

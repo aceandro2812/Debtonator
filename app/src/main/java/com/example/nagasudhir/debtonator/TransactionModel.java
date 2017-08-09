@@ -19,6 +19,9 @@ public class TransactionModel {
     public static final String KEY_TRANSACTION_TIME = "transaction_time";
     public static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_UPDATED_AT = "updated_at";
+    public static final String VARIABLE_TRANSACTION_SUM = "tran_sum";
+    public static final String VARIABLE_TRANSACTION_PEOPLE = "tran_people_names";
+    public static final String VARIABLE_TRANSACTION_PEOPLE_IDS = "tran_people_ids";
     /**
      * A constant, stores the the table name
      */
@@ -36,21 +39,58 @@ public class TransactionModel {
      * Returns all the transactions in the table
      */
     public static Cursor getAllTransactions(SQLiteDatabase db) {
-        return db.rawQuery("SELECT id AS _id, * FROM transactions_details;", null);
+        return db.rawQuery("SELECT id AS _id, * FROM transactions_details", null);
     }
 
     /**
      * Returns a transaction in the table by its id
      */
     public static Cursor getTransactionById(SQLiteDatabase db, String idString) {
-        return db.rawQuery("SELECT id AS _id, * FROM transactions_details WHERE id = ?;", new String[]{idString});
+        return db.rawQuery("SELECT id AS _id, * FROM transactions_details WHERE id = ?", new String[]{idString});
     }
 
     /**
      * Returns transactions in the table by its transaction_sets_id
      */
     public static Cursor getTransactionByTransactionSetId(SQLiteDatabase db, String idString) {
-        return db.rawQuery("SELECT id AS _id, * FROM transactions_details WHERE transaction_sets_id = ?;", new String[]{idString});
+        return db.rawQuery("SELECT id AS _id, * FROM transactions_details WHERE transaction_sets_id = ?", new String[]{idString});
+    }
+
+    /**
+     * Returns transactions in the table by its transaction_sets_id
+     */
+    public static Cursor getTransactionByTransactionSetIdInDetail(SQLiteDatabase db, String idString) {
+        return db.rawQuery("SELECT transactions_details.id AS _id, \n" +
+                "       transactions_details.description, \n" +
+                "       transactions_details.metadata, \n" +
+                "       transactions_details.transaction_time, \n" +
+                "       transactions_details.updated_at, \n" +
+                "       tran_aggregate_info.tran_sum, \n" +
+                "       tran_aggregate_info.tran_people_names, \n" +
+                "       tran_aggregate_info.tran_people_ids \n" +
+                "FROM   transactions_details \n" +
+                "       LEFT OUTER JOIN (SELECT sorted_trans.transactions_details_id, \n" +
+                "                               Sum(sorted_trans.contribution) \n" +
+                "                               AS \n" +
+                "                                                           tran_sum, \n" +
+                "Group_concat(sorted_trans.people_details_id, ', ') AS \n" +
+                "                            tran_people_ids, \n" +
+                "Group_concat(people_details.username, ', ')        AS \n" +
+                "                            tran_people_names \n" +
+                "FROM   (SELECT * \n" +
+                " FROM   transation_contributions \n" +
+                " ORDER  BY transation_contributions.contribution DESC, \n" +
+                "           transation_contributions.is_consumer DESC) AS \n" +
+                "sorted_trans \n" +
+                "LEFT OUTER JOIN people_details \n" +
+                "             ON people_details.id = \n" +
+                "                sorted_trans.people_details_id \n" +
+                "GROUP  BY sorted_trans.transactions_details_id) AS \n" +
+                "                    tran_aggregate_info \n" +
+                "ON tran_aggregate_info.transactions_details_id = \n" +
+                "transactions_details.id \n" +
+                "WHERE  transactions_details.transaction_sets_id = ? \n" +
+                "GROUP  BY transactions_details.id", new String[]{idString});
     }
 
     /**

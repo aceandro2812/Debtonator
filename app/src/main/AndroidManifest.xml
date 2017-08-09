@@ -39,6 +39,11 @@
             android:name=".TransactionSetProvider"
             android:authorities="com.example.nagasudhir.debtonator.transaction_set"
             android:exported="false" />
+
+        <provider
+            android:name=".TransactionProvider"
+            android:authorities="com.example.nagasudhir.debtonator.transaction"
+            android:exported="false" />
     </application>
 
 </manifest>
