@@ -17,8 +17,6 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".TransactionSetsActivity"
             android:label="@string/title_activity_transaction_sets"
@@ -34,16 +32,26 @@
             android:name=".Person"
             android:authorities="com.example.nagasudhir.debtonator.person"
             android:exported="false" />
-
         <provider
             android:name=".TransactionSetProvider"
             android:authorities="com.example.nagasudhir.debtonator.transaction_set"
             android:exported="false" />
-
         <provider
             android:name=".TransactionProvider"
             android:authorities="com.example.nagasudhir.debtonator.transaction"
             android:exported="false" />
+
+        <activity
+            android:name=".TransactionEditActivity"
+            android:label="@string/title_activity_transaction_edit"
+            android:parentActivityName="com.example.nagasudhir.debtonator.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagasudhir.debtonator.HomeActivity" />
+
+        </activity>
     </application>
 
 </manifest>

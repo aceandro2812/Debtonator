@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -93,6 +94,17 @@ public class HomeActivity extends AppCompatActivity
         });
         mTransactionsListView.setAdapter(mTransactionsAdapter);
 
+        mTransactionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                final String transaction_id = ((TextView) v.findViewById(R.id.tran_id)).getText().toString();
+                // set the bundle to start transaction editing screen
+                Intent intent = new Intent(getBaseContext(), TransactionEditActivity.class);
+                intent.putExtra("transaction_id", transaction_id);
+                startActivity(intent);
+                finish();
+            }
+        });
         // Setting up the person list
         mPersonsListView = (ListView) findViewById(R.id.personList);
 
