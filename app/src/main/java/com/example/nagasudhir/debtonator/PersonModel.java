@@ -45,6 +45,11 @@ public class PersonModel {
     public static final String KEY_UPDATED_AT = "updated_at";
 
     /**
+     * Variable used for the table people_details sql, stores the net balance of a person in the transaction set
+     */
+    public static final String VARIABLE_PERSON_BALANCE = "person_balance";
+
+    /**
      * A constant, stores the the table name
      */
     private static final String TABLE_NAME = "people_details";
@@ -84,14 +89,49 @@ public class PersonModel {
      * Returns all the persons in the table
      */
     public static Cursor getAllPersons(SQLiteDatabase db) {
-        return db.rawQuery("SELECT id AS _id, * FROM people_details;", null);
+        return db.rawQuery("SELECT id AS _id, * FROM people_details", null);
+    }
+
+    /**
+     * Returns all the persons in the table
+     */
+    public static Cursor getTransactionSetPersonsInDetail(SQLiteDatabase db, String transactionSetIdString) {
+        return db.rawQuery("SELECT Sum(transation_contributions.contribution) - Sum(CASE \n" +
+                "                                                          WHEN \n" +
+                "              transation_contributions.is_consumer = 1 THEN \n" +
+                "       tran_aggr_info.consumption_share \n" +
+                "       ELSE 0 \n" +
+                "       END) AS person_balance, \n" +
+                "       transation_contributions.people_details_id AS _id, \n" +
+                "       people_details.username \n" +
+                "FROM   transation_contributions \n" +
+                "       LEFT OUTER JOIN \n" +
+                "       (SELECT transation_contributions.transactions_details_id, \n" +
+                "               Sum(transation_contributions.contribution) / Sum( \n" +
+                "               transation_contributions.is_consumer) AS \n" +
+                "                                       consumption_share \n" +
+                "        FROM   transation_contributions \n" +
+                "        GROUP  BY transation_contributions.transactions_details_id) AS \n" +
+                "                                       tran_aggr_info \n" +
+                "                    ON tran_aggr_info.transactions_details_id = \n" +
+                "                       transation_contributions.transactions_details_id \n" +
+                "       LEFT OUTER JOIN people_details \n" +
+                "                    ON people_details.id = \n" +
+                "                       transation_contributions.people_details_id \n" +
+                "WHERE  transation_contributions.transactions_details_id IN (SELECT id \n" +
+                "                                                            FROM \n" +
+                "       transactions_details \n" +
+                "                                                            WHERE \n" +
+                "              transaction_sets_id = ?) \n" +
+                "GROUP  BY transation_contributions.people_details_id \n" +
+                "ORDER  BY people_details.username COLLATE NOCASE", new String[]{transactionSetIdString});
     }
 
     /**
      * Returns a person in the table
      */
     public static Cursor getPersonById(SQLiteDatabase db, String idString) {
-        return db.rawQuery("SELECT id AS _id, * FROM people_details WHERE id = ?;", new String[]{idString});
+        return db.rawQuery("SELECT id AS _id, * FROM people_details WHERE id = ?", new String[]{idString});
     }
 
     /**

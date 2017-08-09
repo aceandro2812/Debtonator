@@ -111,13 +111,21 @@ public class HomeActivity extends AppCompatActivity
         mPersonsAdapter = new SimpleCursorAdapter(getBaseContext(),
                 R.layout.activity_home_person_list_item_layout,
                 null,
-                new String[]{PersonModel.KEY_USERNAME, PersonModel.KEY_EMAIL_ID, PersonModel.KEY_PHONE_NUMBER},
-                new int[]{R.id.tran_description, R.id.person_email, R.id.tran_people}, 0);
+                new String[]{PersonModel.KEY_USERNAME, "_id", PersonModel.VARIABLE_PERSON_BALANCE},
+                new int[]{R.id.person_name, R.id.person_id, R.id.person_balance}, 0);
 
         mPersonsListView.setAdapter(mPersonsAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_manage_persons);
         fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        FloatingActionButton addTranFab = (FloatingActionButton) findViewById(R.id.fab_add_tran);
+        addTranFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -256,7 +264,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
         if (id == 0) {
-            Uri uri = Person.CONTENT_URI;
+            Uri uri = Uri.parse(Person.CONTENT_URI + "/by_transaction_set/" + mTransactionSetId);
             return new CursorLoader(this, uri, null, null, null, null);
         } else if (id == 1) {
             Uri uri = Uri.parse(TransactionProvider.CONTENT_URI + "/by_transaction_set/" + mTransactionSetId);
