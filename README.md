@@ -4,6 +4,7 @@
 * Create POJO, model, content Provider for TransactionSets table -- done
 * Transaction details model seeds function --done
 * Additional functions in Transaction details model
+* Transaction tags db update script in android script
 
 ## Links
 * Saving app state using save instance state - https://stackoverflow.com/questions/151777/saving-android-activity-state-using-save-instance-state

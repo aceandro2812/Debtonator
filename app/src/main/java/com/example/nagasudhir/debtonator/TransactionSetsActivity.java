@@ -33,7 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,7 +103,7 @@ public class TransactionSetsActivity extends AppCompatActivity
                     try {
                         Date date = readingFormat.parse(dateString);
                         textView.setText(outputFormat.format(date));
-                    } catch (ParseException e) {
+                    } catch (Exception e) {
                         textView.setText(dateString);
                         e.printStackTrace();
                     }
@@ -352,6 +351,20 @@ public class TransactionSetsActivity extends AppCompatActivity
             }
         }
         return tempNewName;
+    }
+
+    public static String changeDateFormat(String originalStringFormat, String desiredStringFormat, String inDateString) {
+        SimpleDateFormat readingFormat = new SimpleDateFormat(originalStringFormat);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(desiredStringFormat);
+        String outDateString = null;
+        try {
+            Date date = readingFormat.parse(inDateString);
+            outDateString = outputFormat.format(date);
+        } catch (Exception e) {
+            outDateString = null;
+            e.printStackTrace();
+        }
+        return outDateString;
     }
 
     /**
