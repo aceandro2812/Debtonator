@@ -13,10 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
         android:text="Description"
         app:layout_constraintBottom_toBottomOf="@+id/tran_description"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <EditText
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tran_add_btn"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.554"
+        app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginEnd="8dp" />
 
     <Button
@@ -89,12 +89,12 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
         android:text="Notes"
+        android:textSize="12sp"
+        app:layout_constraintRight_toLeftOf="@+id/tran_metadata"
+        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/tran_metadata"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:layout_marginBottom="8dp" />
 
     <MultiAutoCompleteTextView
         android:id="@+id/tran_metadata"
@@ -103,11 +103,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:maxLines="3"
         android:text="Transaction Notes"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/tran_description"
+        android:textSize="14sp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tran_description" />
+        app:layout_constraintTop_toBottomOf="@+id/tran_description"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tran_description" />
 
     <Button
         android:id="@+id/tran_summary_btn"

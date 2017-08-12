@@ -112,7 +112,7 @@ public class AppDB extends SQLiteOpenHelper {
                 ");";
         */
         String sql = "DROP TABLE IF EXISTS people_details;\n" +
-                "DROP TABLE IF EXISTS transation_contributions;\n" +
+                "DROP TABLE IF EXISTS transaction_contributions;\n" +
                 "DROP TABLE IF EXISTS transaction_tags;\n" +
                 "DROP TABLE IF EXISTS transactions_details;\n" +
                 "DROP TABLE IF EXISTS transaction_sets;\n" +
@@ -159,7 +159,7 @@ public class AppDB extends SQLiteOpenHelper {
                 "                   ON \n" +
                 "                   DELETE CASCADE \n" +
                 "                   );\n" +
-                "CREATE TABLE \"transation_contributions\" \n" +
+                "CREATE TABLE \"transaction_contributions\" \n" +
                 "                         ( \n" +
                 "                                      `id`                      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
                 "                                      `transactions_details_id` INTEGER NOT NULL, \n" +
@@ -182,7 +182,7 @@ public class AppDB extends SQLiteOpenHelper {
                 "                                            `transaction_sets_id` \n" +
                 "                               );\n" +
                 "CREATE UNIQUE INDEX `trasaction_contributions_people_transaction_details_unique` \n" +
-                "                  ON `transation_contributions` \n" +
+                "                  ON `transaction_contributions` \n" +
                 "                                      ( \n" +
                 "                                                          `transactions_details_id` , \n" +
                 "                                                          `people_details_id` \n" +
@@ -212,29 +212,29 @@ public class AppDB extends SQLiteOpenHelper {
                 "                   \n" +
                 "                  END;\n";
         // Inserting seeds into the tables
-        sql += "INSERT INTO `transation_contributions` VALUES (1,1,3,125.0,0);\n" +
-                "INSERT INTO `transation_contributions` VALUES (2,1,1,450.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (3,1,4,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (4,1,5,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (5,2,2,1010.0,0);\n" +
-                "INSERT INTO `transation_contributions` VALUES (6,2,4,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (7,3,2,5000.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (8,3,3,1200.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (12,3,4,10000.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (13,3,1,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (14,3,5,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (15,6,1,182.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (16,6,3,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (17,6,4,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (18,6,5,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (19,7,4,69.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (20,8,1,20.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (21,8,2,150.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (22,9,1,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (23,9,2,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (24,9,3,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (25,9,4,0.0,1);\n" +
-                "INSERT INTO `transation_contributions` VALUES (26,9,5,326.0,1);\n" +
+        sql += "INSERT INTO `transaction_contributions` VALUES (1,1,3,125.0,0);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (2,1,1,450.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (3,1,4,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (4,1,5,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (5,2,2,1010.0,0);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (6,2,4,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (7,3,2,5000.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (8,3,3,1200.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (12,3,4,10000.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (13,3,1,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (14,3,5,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (15,6,1,182.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (16,6,3,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (17,6,4,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (18,6,5,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (19,7,4,69.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (20,8,1,20.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (21,8,2,150.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (22,9,1,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (23,9,2,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (24,9,3,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (25,9,4,0.0,1);\n" +
+                "INSERT INTO `transaction_contributions` VALUES (26,9,5,326.0,1);\n" +
                 "INSERT INTO `transactions_details` VALUES (1,1,'electricity bill','elec bill','2017-06-28 17:14:59','2017-06-27 18:16:04','2017-06-27 18:16:04');\n" +
                 "INSERT INTO `transactions_details` VALUES (2,1,'debt','sudhir to naveen','2017-06-28 17:14:59','2017-06-28 16:46:31','2017-06-28 16:46:31');\n" +
                 "INSERT INTO `transactions_details` VALUES (3,1,'trip','trip to mars','2017-06-28 17:14:59','2017-06-28 16:46:49','2017-06-28 16:46:49');\n" +

@@ -54,10 +54,10 @@ public class TransactionSetModel {
                 "SUM(transactions_details_summary.tran_contribution_sum) AS tran_set_worth \n" +
                 "FROM transaction_sets \n" +
                 "LEFT OUTER JOIN \n" +
-                "(SELECT transactions_details.*, SUM(transation_contributions.contribution) AS tran_contribution_sum \n" +
+                "(SELECT transactions_details.*, SUM(transaction_contributions.contribution) AS tran_contribution_sum \n" +
                 "FROM transactions_details \n" +
                 "LEFT OUTER JOIN \n" +
-                "transation_contributions ON transation_contributions.transactions_details_id = transactions_details.id\n" +
+                "transaction_contributions ON transaction_contributions.transactions_details_id = transactions_details.id\n" +
                 "GROUP BY transactions_details.id \n" +
                 " ) AS transactions_details_summary \n" +
                 "ON transaction_sets.id = transactions_details_summary.transaction_sets_id \n" +

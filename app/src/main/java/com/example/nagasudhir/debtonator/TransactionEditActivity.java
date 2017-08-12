@@ -8,12 +8,18 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -21,8 +27,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TransactionEditActivity extends AppCompatActivity {
+public class TransactionEditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    ListView mTransactionsContributionsListView;
+    SimpleCursorAdapter mTransactionsContributionsAdapter;
     String mTransactionId = null;
     String mTransactionDesc = null;
     String mTransactionMetadata = null;
@@ -38,6 +46,32 @@ public class TransactionEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mTransactionId = intent.getExtras().getString("transaction_id");
         new LongOperation().execute();
+
+        // Setting up the Transactions list
+        mTransactionsContributionsListView = (ListView) findViewById(R.id.tran_contr_list);
+
+        mTransactionsContributionsAdapter = new SimpleCursorAdapter(getBaseContext(),
+                R.layout.activity_transaction_edit_contribution_list_item,
+                null,
+                new String[]{"_id", TransactionContributionModel.KEY_PERSON_ID, TransactionContributionModel.KEY_CONTRIBUTION, TransactionContributionModel.KEY_IS_CONSUMER},
+                new int[]{R.id.tran_contr_id, R.id.tran_person_name, R.id.tran_contribution, R.id.tran_is_consumer}, 0);
+
+        mTransactionsContributionsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+
+                if (columnIndex == cursor.getColumnIndex(TransactionContributionModel.KEY_IS_CONSUMER)) {
+                    CheckBox chkBox = (CheckBox) view;
+                    chkBox.setChecked((cursor.getDouble(columnIndex) == 0 ? false : true));
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mTransactionsContributionsListView.setAdapter(mTransactionsContributionsAdapter);
+        /* Creating a loader for populating listview from sqlite database */
+        /* This statement, invokes the method onCreatedLoader() */
+        getSupportLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -142,5 +176,30 @@ public class TransactionEditActivity extends AppCompatActivity {
                     }
                 }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false);
         timePickerDialog.show();
+    }
+
+    /**
+     * A callback method invoked by the loader when initLoader() is called
+     */
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+
+        Uri uri = Uri.parse(TransactionContributionProvider.CONTENT_URI + "/by_transaction_detail/" + mTransactionId);
+        return new CursorLoader(this, uri, null, null, null, null);
+
+    }
+
+    /**
+     * A callback method, invoked after the requested content provider returned all the data
+     */
+    @Override
+    public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+        mTransactionsContributionsAdapter.swapCursor(arg1);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> arg0) {
+        mTransactionsContributionsAdapter.swapCursor(null);
     }
 }

@@ -78,9 +78,9 @@ public class TransactionModel {
                 "Group_concat(people_details.username, ', ')        AS \n" +
                 "                            tran_people_names \n" +
                 "FROM   (SELECT * \n" +
-                " FROM   transation_contributions \n" +
-                " ORDER  BY transation_contributions.contribution DESC, \n" +
-                "           transation_contributions.is_consumer DESC) AS \n" +
+                " FROM   transaction_contributions \n" +
+                " ORDER  BY transaction_contributions.contribution DESC, \n" +
+                "           transaction_contributions.is_consumer DESC) AS \n" +
                 "sorted_trans \n" +
                 "LEFT OUTER JOIN people_details \n" +
                 "             ON people_details.id = \n" +

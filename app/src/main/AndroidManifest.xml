@@ -40,6 +40,10 @@
             android:name=".TransactionProvider"
             android:authorities="com.example.nagasudhir.debtonator.transaction"
             android:exported="false" />
+        <provider
+            android:name=".TransactionContributionProvider"
+            android:authorities="com.example.nagasudhir.debtonator.transaction_contribution"
+            android:exported="false" />
 
         <activity
             android:name=".TransactionEditActivity"
