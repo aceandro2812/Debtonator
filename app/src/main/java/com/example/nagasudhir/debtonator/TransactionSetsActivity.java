@@ -353,20 +353,6 @@ public class TransactionSetsActivity extends AppCompatActivity
         return tempNewName;
     }
 
-    public static String changeDateFormat(String originalStringFormat, String desiredStringFormat, String inDateString) {
-        SimpleDateFormat readingFormat = new SimpleDateFormat(originalStringFormat);
-        SimpleDateFormat outputFormat = new SimpleDateFormat(desiredStringFormat);
-        String outDateString = null;
-        try {
-            Date date = readingFormat.parse(inDateString);
-            outDateString = outputFormat.format(date);
-        } catch (Exception e) {
-            outDateString = null;
-            e.printStackTrace();
-        }
-        return outDateString;
-    }
-
     /**
      * A callback method invoked by the loader when initLoader() is called
      */

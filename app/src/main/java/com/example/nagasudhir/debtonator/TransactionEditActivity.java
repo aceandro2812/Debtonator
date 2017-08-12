@@ -1,6 +1,7 @@
 package com.example.nagasudhir.debtonator;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -14,8 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +26,7 @@ public class TransactionEditActivity extends AppCompatActivity {
     String mTransactionId = null;
     String mTransactionDesc = null;
     String mTransactionMetadata = null;
-    String mTransactionDate = null;
+    Date mTransactionDate = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,23 +66,6 @@ public class TransactionEditActivity extends AppCompatActivity {
         finish();
     }
 
-    public void showDatePickerDialog(View v) {
-        final Calendar calendar = Calendar.getInstance();
-        int yy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH);
-        int dd = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePicker = new DatePickerDialog(TransactionEditActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Date date = new Date(year, monthOfYear, dayOfMonth, 0, 0, 0);
-                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                mTransactionDate = df.format(date);
-                ((Button) findViewById(R.id.tran_date_btn)).setText(mTransactionDate);
-            }
-        }, yy, mm, dd);
-        datePicker.show();
-    }
-
     // Class with extends AsyncTask class
     private class LongOperation extends AsyncTask<String, Void, Void> {
         protected void onPreExecute() {
@@ -99,11 +83,8 @@ public class TransactionEditActivity extends AppCompatActivity {
                     if (transactionCursor.moveToNext()) {
                         mTransactionDesc = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.KEY_DESCRIPTION));
                         mTransactionMetadata = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.KEY_METADATA));
-                        String tempDate = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.KEY_TRANSACTION_TIME));
-                        mTransactionDate = TransactionSetsActivity.changeDateFormat("yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", tempDate);
-                        if (mTransactionDate == null) {
-                            mTransactionDate = tempDate;
-                        }
+                        String tranDateString = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.KEY_TRANSACTION_TIME));
+                        mTransactionDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(tranDateString);
                     }
                 } finally {
                     transactionCursor.close();
@@ -122,7 +103,44 @@ public class TransactionEditActivity extends AppCompatActivity {
             // Set the views
             ((TextView) findViewById(R.id.tran_description)).setText(mTransactionDesc);
             ((TextView) findViewById(R.id.tran_metadata)).setText(mTransactionMetadata);
-            ((Button) findViewById(R.id.tran_date_btn)).setText(mTransactionDate);
+            ((Button) findViewById(R.id.tran_date_btn)).setText((new SimpleDateFormat("dd/MM/yyyy")).format(mTransactionDate));
+            ((Button) findViewById(R.id.tran_time_btn)).setText((new SimpleDateFormat("HH:mm")).format(mTransactionDate));
         }
+    }
+
+    public void showDatePickerDialog(View v) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(mTransactionDate);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        mTransactionDate.setYear(year - 1900);
+                        mTransactionDate.setMonth(monthOfYear);
+                        mTransactionDate.setDate(dayOfMonth);
+                        ((Button) findViewById(R.id.tran_date_btn)).setText((new SimpleDateFormat("dd/MM/yyyy")).format(mTransactionDate));
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    public void showTimePickerDialog(View v) {
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(mTransactionDate);
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        mTransactionDate.setHours(hourOfDay);
+                        mTransactionDate.setMinutes(minute);
+                        ((Button) findViewById(R.id.tran_time_btn)).setText((new SimpleDateFormat("HH:mm")).format(mTransactionDate));
+                    }
+                }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false);
+        timePickerDialog.show();
     }
 }
