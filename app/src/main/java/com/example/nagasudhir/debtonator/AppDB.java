@@ -116,101 +116,80 @@ public class AppDB extends SQLiteOpenHelper {
                 "DROP TABLE IF EXISTS transaction_tags;\n" +
                 "DROP TABLE IF EXISTS transactions_details;\n" +
                 "DROP TABLE IF EXISTS transaction_sets;\n" +
-                "CREATE TABLE \"people_details\" \n" +
-                "             ( \n" +
-                "                          `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \n" +
-                "                          `username` TEXT NOT NULL UNIQUE, \n" +
-                "                          `phone_number` TEXT UNIQUE, \n" +
-                "                          `email_id` TEXT, \n" +
-                "                          `metadata` TEXT, \n" +
-                "                          `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, \n" +
-                "                          `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP \n" +
-                "             );\n" +
-                "CREATE TABLE \"transactions_details\" \n" +
-                "             ( \n" +
-                "                          `id`                  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \n" +
-                "                          `transaction_sets_id` INTEGER NOT NULL, \n" +
-                "                          `description` TEXT, \n" +
-                "                          `metadata` TEXT, \n" +
-                "                          `transaction_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, \n" +
-                "                          `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, \n" +
-                "                          `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, \n" +
-                "                          FOREIGN KEY(`transaction_sets_id`) REFERENCES `transaction_sets`(`id`) ON\n" +
-                "             DELETE CASCADE \n" +
-                "             ON \n" +
-                "             UPDATE CASCADE \n" +
-                "             );\n" +
-                "CREATE TABLE \"transaction_sets\" \n" +
-                "                   ( \n" +
-                "                                `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \n" +
-                "                                `name_string` TEXT NOT NULL UNIQUE, \n" +
-                "                                `metadata` TEXT, \n" +
-                "                                `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP, \n" +
-                "                                `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP \n" +
-                "                   );\n" +
-                "CREATE TABLE \"transaction_tags\" \n" +
-                "                   ( \n" +
-                "                                `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \n" +
-                "                                `name_string` TEXT NOT NULL, \n" +
-                "                                `transactions_details_id` INTEGER NOT NULL, \n" +
-                "                                `updated_at`              INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
-                "                                FOREIGN KEY(`transactions_details_id`) REFERENCES `transactions_details`(`id`) ON\n" +
-                "                   UPDATE CASCADE \n" +
-                "                   ON \n" +
-                "                   DELETE CASCADE \n" +
-                "                   );\n" +
-                "CREATE TABLE \"transaction_contributions\" \n" +
-                "                         ( \n" +
-                "                                      `id`                      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
-                "                                      `transactions_details_id` INTEGER NOT NULL, \n" +
-                "                                      `people_details_id`       INTEGER NOT NULL, \n" +
-                "                                      `contribution`            REAL NOT NULL DEFAULT 0, \n" +
-                "                                      `is_consumer`             INTEGER NOT NULL DEFAULT 0, \n" +
-                "                                      FOREIGN KEY(`transactions_details_id`) REFERENCES `transactions_details`(`id`) ON\n" +
-                "                         UPDATE CASCADE \n" +
-                "                         ON \n" +
-                "                         DELETE CASCADE, \n" +
-                "                                FOREIGN KEY(`people_details_id`) REFERENCES `people_details`(`id`)\n" +
-                "                         ON \n" +
-                "                         UPDATE CASCADE \n" +
-                "                         ON \n" +
-                "                         DELETE CASCADE \n" +
-                "                         );\n" +
-                "CREATE INDEX `transactions_details_transaction_sets_id_index` \n" +
-                "                  ON `transactions_details` \n" +
-                "                               ( \n" +
-                "                                            `transaction_sets_id` \n" +
-                "                               );\n" +
-                "CREATE UNIQUE INDEX `transaction_contributions_people_transaction_details_unique` \n" +
-                "                  ON `transaction_contributions` \n" +
-                "                                      ( \n" +
-                "                                                          `transactions_details_id` , \n" +
-                "                                                          `people_details_id` \n" +
-                "                                      );\n" +
+                "CREATE TABLE \"people_details\" (\n" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                " `username` TEXT NOT NULL UNIQUE,\n" +
+                " `phone_number` TEXT UNIQUE,\n" +
+                " `email_id` TEXT,\n" +
+                " `metadata` TEXT,\n" +
+                " `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+                " `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP\n" +
+                ");\n" +
+
+                "CREATE TABLE \"transactions_details\" (\n" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                " `transaction_sets_id` INTEGER NOT NULL,\n" +
+                " `description` TEXT,\n" +
+                " `metadata` TEXT,\n" +
+                " `transaction_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+                " `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+                " `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+                " FOREIGN KEY(`transaction_sets_id`) REFERENCES `transaction_sets`(`id`) ON DELETE CASCADE ON UPDATE CASCADE\n" +
+                ");\n" +
+
+                "CREATE TABLE \"transaction_contributions\" (\n" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                " `transactions_details_id` INTEGER NOT NULL,\n" +
+                " `people_details_id` INTEGER NOT NULL,\n" +
+                " `contribution` REAL NOT NULL DEFAULT 0,\n" +
+                " `is_consumer` INTEGER NOT NULL DEFAULT 0,\n" +
+                " FOREIGN KEY(`transactions_details_id`) REFERENCES `transactions_details`(`id`) ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                " FOREIGN KEY(`people_details_id`) REFERENCES `people_details`(`id`) ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                ");\n" +
+
+                "CREATE TABLE \"transaction_sets\" (\n" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                " `name_string` TEXT NOT NULL UNIQUE,\n" +
+                " `metadata` TEXT,\n" +
+                " `created_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+                " `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP\n" +
+                ");\n" +
+
+                "CREATE TABLE \"transaction_tags\" (\n" +
+                " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                " `name_string` TEXT NOT NULL,\n" +
+                " `transactions_details_id` INTEGER NOT NULL,\n" +
+                " `updated_at` INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+                " FOREIGN KEY(`transactions_details_id`) REFERENCES `transactions_details`(`id`) ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                ");\n" +
+
+                "CREATE INDEX `transactions_details_transaction_sets_id_index` ON `transactions_details` (`transaction_sets_id` );\n" +
+
+                "CREATE UNIQUE INDEX `transaction_contributions_people_transaction_details_unique` ON \"transaction_contributions\" (`transactions_details_id` ,`people_details_id` );\n" +
+
+                "CREATE UNIQUE INDEX `transaction_tags_unique_tag_index` ON `transaction_tags` (`name_string` ,`transactions_details_id` );\n" +
+
                 "CREATE TRIGGER people_details_updated_at_trigger AFTER \n" +
-                "                    UPDATE \n" +
-                "                    ON people_details BEGIN \n" +
-                "                    UPDATE people_details \n" +
-                "                    SET    updated_at = DATETIME('now') \n" +
-                "                    WHERE  id = NEW.id; \n" +
-                "                   \n" +
-                "                  END;\n" +
+                "  UPDATE \n" +
+                "  ON people_details BEGIN \n" +
+                "  UPDATE people_details \n" +
+                "  SET    updated_at = DATETIME('now') \n" +
+                "  WHERE  id = NEW.id; \n" +
+                "END;\n" +
                 "CREATE TRIGGER transaction_sets_updated_at_trigger AFTER \n" +
-                "                    UPDATE \n" +
-                "                    ON transaction_sets BEGIN \n" +
-                "                    UPDATE transaction_sets \n" +
-                "                    SET    updated_at = DATETIME('now') \n" +
-                "                    WHERE  id = NEW.id; \n" +
-                "                   \n" +
-                "                  END;\n" +
+                "  UPDATE \n" +
+                "  ON transaction_sets BEGIN \n" +
+                "  UPDATE transaction_sets \n" +
+                "  SET    updated_at = DATETIME('now') \n" +
+                "  WHERE  id = NEW.id; \n" +
+                "END;\n" +
                 "CREATE TRIGGER transaction_tags_updated_at_trigger AFTER \n" +
-                "                    UPDATE \n" +
-                "                    ON transaction_tags BEGIN \n" +
-                "                    UPDATE transaction_tags \n" +
-                "                    SET    updated_at = DATETIME('now') \n" +
-                "                    WHERE  id = NEW.id; \n" +
-                "                   \n" +
-                "                  END;\n";
+                "  UPDATE \n" +
+                "  ON transaction_tags BEGIN \n" +
+                "  UPDATE transaction_tags \n" +
+                "  SET    updated_at = DATETIME('now') \n" +
+                "  WHERE  id = NEW.id; \n" +
+                "END;\n";
         // Inserting seeds into the tables
         sql += "INSERT INTO `transaction_contributions` VALUES (1,1,3,125.0,0);\n" +
                 "INSERT INTO `transaction_contributions` VALUES (2,1,1,450.0,1);\n" +
