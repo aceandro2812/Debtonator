@@ -3,6 +3,7 @@ package com.example.nagasudhir.debtonator;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,10 +33,13 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
 
     ListView mTransactionsContributionsListView;
     SimpleCursorAdapter mTransactionsContributionsAdapter;
+    String mTransactionSetId = null;
     String mTransactionId = null;
     String mTransactionDesc = null;
     String mTransactionMetadata = null;
     Date mTransactionDate = new Date();
+    String mNextTranId = null;
+    String mPrevTranId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,13 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Get the transaction set Id to load from shared preferences
+
+        SharedPreferences mSharedPrefs = getSharedPreferences(GlobalVarClass.SHARED_PREFS_KEY, MODE_PRIVATE);
+        mTransactionSetId = mSharedPrefs.getString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, null);
+        if (mTransactionSetId == null) {
+            homeBtn(null);
+        }
         Intent intent = getIntent();
         mTransactionId = intent.getExtras().getString("transaction_id");
         new LongOperation().execute();
@@ -120,10 +132,15 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
                         String tranDateString = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.KEY_TRANSACTION_TIME));
                         mTransactionDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(tranDateString);
                     }
+                    transactionCursor.close();
+                    transactionCursor = TransactionEditActivity.this.getContentResolver().query(Uri.parse(TransactionProvider.CONTENT_URI + "/next_prev/" + mTransactionSetId + "/" + mTransactionId), null, null, null, null);
+                    if (transactionCursor.moveToNext()) {
+                        mNextTranId = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.VARIABLE_NEXT_TRAN_ID));
+                        mPrevTranId = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.VARIABLE_PREV_TRAN_ID));
+                    }
                 } finally {
                     transactionCursor.close();
                 }
-
             } catch (SQLException e) {
 
             } catch (Exception e) {
@@ -176,6 +193,34 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
                     }
                 }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false);
         timePickerDialog.show();
+    }
+
+    /*
+    * on Next Transaction Button Click
+    * */
+    public void nextTranBtn(View v) {
+        if (mNextTranId != null) {
+            Intent intent = new Intent(getBaseContext(), TransactionEditActivity.class);
+            intent.putExtra("transaction_id", mNextTranId);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(getBaseContext(), "Next Transaction Not Present", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*
+    * on Previous Transaction Button Click
+    * */
+    public void prevTranBtn(View v) {
+        if (mPrevTranId != null) {
+            Intent intent = new Intent(getBaseContext(), TransactionEditActivity.class);
+            intent.putExtra("transaction_id", mPrevTranId);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(getBaseContext(), "Previous Transaction Not Present", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

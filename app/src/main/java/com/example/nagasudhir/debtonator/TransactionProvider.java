@@ -25,6 +25,7 @@ public class TransactionProvider extends ContentProvider {
     private static final int TRANSACTIONS = 1;
     private static final int TRANSACTION = 2;
     private static final int TRANSACTION_BY_SET = 3;
+    private static final int NEXT_PREV_TRANSACTION = 4;
 
     private static final UriMatcher uriMatcher;
 
@@ -33,6 +34,7 @@ public class TransactionProvider extends ContentProvider {
         uriMatcher.addURI(PROVIDER_NAME, "transactions", TRANSACTIONS);
         uriMatcher.addURI(PROVIDER_NAME, "transactions/#", TRANSACTION);
         uriMatcher.addURI(PROVIDER_NAME, "transactions/by_transaction_set/#", TRANSACTION_BY_SET);
+        uriMatcher.addURI(PROVIDER_NAME, "transactions/next_prev/#/#", NEXT_PREV_TRANSACTION);
     }
 
     /**
@@ -65,6 +67,8 @@ public class TransactionProvider extends ContentProvider {
             return TransactionModel.getTransactionById(mAppDB, uri.getLastPathSegment());
         } else if (uriMatcher.match(uri) == TRANSACTION_BY_SET) {
             return TransactionModel.getTransactionByTransactionSetIdInDetail(mAppDB, uri.getLastPathSegment());
+        } else if (uriMatcher.match(uri) == NEXT_PREV_TRANSACTION) {
+            return TransactionModel.getNextPrevTransactionsById(mAppDB, uri.getLastPathSegment(), uri.getPathSegments().get(uri.getPathSegments().size() - 2));
         } else {
             return null;
         }

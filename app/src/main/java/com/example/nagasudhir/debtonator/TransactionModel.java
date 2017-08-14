@@ -22,6 +22,8 @@ public class TransactionModel {
     public static final String VARIABLE_TRANSACTION_SUM = "tran_sum";
     public static final String VARIABLE_TRANSACTION_PEOPLE = "tran_people_names";
     public static final String VARIABLE_TRANSACTION_PEOPLE_IDS = "tran_people_ids";
+    public static final String VARIABLE_NEXT_TRAN_ID = "next_id";
+    public static final String VARIABLE_PREV_TRAN_ID = "prev_id";
     /**
      * A constant, stores the the table name
      */
@@ -47,6 +49,22 @@ public class TransactionModel {
      */
     public static Cursor getTransactionById(SQLiteDatabase db, String idString) {
         return db.rawQuery("SELECT id AS _id, * FROM transactions_details WHERE id = ?", new String[]{idString});
+    }
+
+    /**
+     * Returns next and prev transaction ids
+     */
+    public static Cursor getNextPrevTransactionsById(SQLiteDatabase db, String idString, String transactionSetId) {
+        return db.rawQuery("SELECT (SELECT transactions_details.id \n" +
+                "        FROM   transactions_details \n" +
+                "        WHERE  id < ? AND transaction_sets_id = ? \n" +
+                "        ORDER  BY id DESC \n" +
+                "        LIMIT  1) AS prev_id, \n" +
+                "       (SELECT transactions_details.id \n" +
+                "        FROM   transactions_details \n" +
+                "        WHERE  id > ? AND transaction_sets_id = ? \n" +
+                "        ORDER  BY id \n" +
+                "        LIMIT  1) AS next_id;", new String[]{idString, transactionSetId, idString, transactionSetId});
     }
 
     /**
