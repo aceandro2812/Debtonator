@@ -181,7 +181,7 @@ public class AppDB extends SQLiteOpenHelper {
                 "                               ( \n" +
                 "                                            `transaction_sets_id` \n" +
                 "                               );\n" +
-                "CREATE UNIQUE INDEX `trasaction_contributions_people_transaction_details_unique` \n" +
+                "CREATE UNIQUE INDEX `transaction_contributions_people_transaction_details_unique` \n" +
                 "                  ON `transaction_contributions` \n" +
                 "                                      ( \n" +
                 "                                                          `transactions_details_id` , \n" +

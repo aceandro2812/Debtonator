@@ -53,7 +53,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         mTransactionsContributionsAdapter = new SimpleCursorAdapter(getBaseContext(),
                 R.layout.activity_transaction_edit_contribution_list_item,
                 null,
-                new String[]{"_id", TransactionContributionModel.KEY_PERSON_ID, TransactionContributionModel.KEY_CONTRIBUTION, TransactionContributionModel.KEY_IS_CONSUMER},
+                new String[]{"_id", PersonModel.KEY_USERNAME, TransactionContributionModel.KEY_CONTRIBUTION, TransactionContributionModel.KEY_IS_CONSUMER},
                 new int[]{R.id.tran_contr_id, R.id.tran_person_name, R.id.tran_contribution, R.id.tran_is_consumer}, 0);
 
         mTransactionsContributionsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {

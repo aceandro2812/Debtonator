@@ -47,7 +47,19 @@ public class TransactionContributionModel {
      * Returns transaction contributions in the table by its transactions_details_id
      */
     public static Cursor getTransactionContributionByTransactionDetailId(SQLiteDatabase db, String idString) {
-        return db.rawQuery("SELECT id AS _id, * FROM transaction_contributions WHERE transactions_details_id = ?", new String[]{idString});
+        return db.rawQuery("SELECT people_details.id AS _id, \n" +
+                "       people_details.username, \n" +
+                "       tran_contributions.* \n" +
+                "FROM   people_details \n" +
+                "       LEFT OUTER JOIN (SELECT * \n" +
+                "                        FROM   transaction_contributions \n" +
+                "                        WHERE  transaction_contributions.transactions_details_id \n" +
+                "                               = ?) AS \n" +
+                "                                             tran_contributions \n" +
+                "                    ON tran_contributions.people_details_id = people_details.id \n" +
+                "ORDER  BY tran_contributions.contribution DESC, \n" +
+                "          tran_contributions.is_consumer DESC, \n" +
+                "          people_details.username COLLATE NOCASE ASC", new String[]{idString});
     }
     
     /**
