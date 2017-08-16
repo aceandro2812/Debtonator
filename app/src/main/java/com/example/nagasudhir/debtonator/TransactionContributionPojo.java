@@ -9,6 +9,7 @@ public class TransactionContributionPojo {
     String transactions_details_id = null;
     String people_details_id = null;
     String contribution = null;
+    boolean is_consumer = false;
 
     public TransactionContributionPojo(String id, String transactions_details_id, String people_details_id, String contribution, boolean is_consumer) {
         this.id = id;
@@ -57,7 +58,5 @@ public class TransactionContributionPojo {
     public void setIs_consumer(boolean is_consumer) {
         this.is_consumer = is_consumer;
     }
-
-    boolean is_consumer = false;
 
 }

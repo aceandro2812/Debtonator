@@ -17,15 +17,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -40,6 +44,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     Date mTransactionDate = new Date();
     String mNextTranId = null;
     String mPrevTranId = null;
+    ArrayList<TransactionContributionPojo> mTransactionContributionsList = new ArrayList<TransactionContributionPojo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +70,50 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         mTransactionsContributionsAdapter = new SimpleCursorAdapter(getBaseContext(),
                 R.layout.activity_transaction_edit_contribution_list_item,
                 null,
-                new String[]{"_id", PersonModel.KEY_USERNAME, TransactionContributionModel.KEY_CONTRIBUTION, TransactionContributionModel.KEY_IS_CONSUMER},
-                new int[]{R.id.tran_contr_id, R.id.tran_person_name, R.id.tran_contribution, R.id.tran_is_consumer}, 0);
+                new String[]{"_id", TransactionContributionModel.KEY_ROW_ID, PersonModel.KEY_USERNAME, TransactionContributionModel.KEY_CONTRIBUTION, TransactionContributionModel.KEY_IS_CONSUMER},
+                new int[]{R.id.tran_person_id, R.id.tran_contr_id, R.id.tran_person_name, R.id.tran_contribution, R.id.tran_is_consumer}, 0);
 
         mTransactionsContributionsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+            public boolean setViewValue(View view, final Cursor cursor, int columnIndex) {
 
                 if (columnIndex == cursor.getColumnIndex(TransactionContributionModel.KEY_IS_CONSUMER)) {
                     CheckBox chkBox = (CheckBox) view;
                     chkBox.setChecked((cursor.getDouble(columnIndex) == 0 ? false : true));
+                    chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            // update or insert the data in the database here
+                            // get the transaction contribution id, person_id, transaction_detail_id from parent view
+                            String tranContributionId = ((TextView) ((ViewGroup) buttonView.getParent()).findViewById(R.id.tran_contr_id)).getText().toString();
+                            String tranContributionPersonId = ((TextView) ((ViewGroup) buttonView.getParent()).findViewById(R.id.tran_person_id)).getText().toString();
+                            String tranContribution = ((EditText) ((ViewGroup) buttonView.getParent()).findViewById(R.id.tran_contribution)).getText().toString();
+                            if (Infix.checkSemantics(tranContribution)) {
+                                tranContribution = Infix.infix(tranContribution) + "";
+                            } else {
+                                tranContribution = "0.0";
+                            }
+                            String isConsumer = (isChecked ? "1" : "0");
+                            if (tranContribution.equals("0.0") && isConsumer.equals("0")) {
+                                int numRowsDeleted = TransactionEditActivity.this.getContentResolver().delete(Uri.parse(TransactionContributionProvider.CONTENT_URI + "/upsert"), null, new String[]{mTransactionId, tranContributionPersonId});
+                            } else {
+                                Cursor transactionCursor = TransactionEditActivity.this.getContentResolver().query(Uri.parse(TransactionContributionProvider.CONTENT_URI + "/upsert"), null, null, new String[]{mTransactionId, tranContributionPersonId, tranContribution, isConsumer}, null);
+                            }
+                        }
+                    });
                     return true;
-                }
+                } /*else if (columnIndex == cursor.getColumnIndex(TransactionContributionModel.KEY_CONTRIBUTION)) {
+                    EditText contributionEditText = (EditText) view;
+                    // get the _id of the cursor
+
+                    contributionEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (!hasFocus) {
+                                // update or insert the data in the database here
+                            }
+                        }
+                    });
+                    return true;
+                }*/
                 return false;
             }
         });
@@ -228,10 +266,8 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-
         Uri uri = Uri.parse(TransactionContributionProvider.CONTENT_URI + "/by_transaction_detail/" + mTransactionId);
         return new CursorLoader(this, uri, null, null, null, null);
-
     }
 
     /**
@@ -239,12 +275,13 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
      */
     @Override
     public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+        //mContributionsCursor = arg1;
         mTransactionsContributionsAdapter.swapCursor(arg1);
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> arg0) {
+        //mContributionsCursor = null;
         mTransactionsContributionsAdapter.swapCursor(null);
     }
 }

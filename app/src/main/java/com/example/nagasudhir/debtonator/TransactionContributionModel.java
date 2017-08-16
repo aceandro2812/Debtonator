@@ -29,6 +29,7 @@ public class TransactionContributionModel {
         // todo Create some rows
 
     }
+
     /**
      * Returns all the transaction contributions in the table
      */
@@ -61,12 +62,25 @@ public class TransactionContributionModel {
                 "          tran_contributions.is_consumer DESC, \n" +
                 "          people_details.username COLLATE NOCASE ASC", new String[]{idString});
     }
-    
+
     /**
      * Creates a the transaction contribution in the table
      */
     public static long insertTransactionContribution(SQLiteDatabase db, ContentValues values) {
         return db.insertWithOnConflict(TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+    }
+
+    /**
+     * Updates a transaction in the table
+     */
+    public static Cursor upsertTransactionContribution(SQLiteDatabase db, String transactionDetailsId, String peopleDetailsId, String contribution, String isConsumer) {
+        return db.rawQuery("INSERT OR REPLACE INTO transaction_contributions (id, transactions_details_id, people_details_id,contribution, is_consumer) \n" +
+                "VALUES (\n" +
+                "(SELECT id FROM transaction_contributions WHERE transaction_contributions.transactions_details_id = ? AND transaction_contributions.people_details_id = ?),\n" +
+                "?,\n" +
+                "?,\n" +
+                "?,\n" +
+                "?)", new String[]{transactionDetailsId, peopleDetailsId, transactionDetailsId, peopleDetailsId, contribution, isConsumer});
     }
 
     /**

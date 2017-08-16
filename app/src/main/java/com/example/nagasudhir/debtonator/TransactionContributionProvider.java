@@ -25,6 +25,7 @@ public class TransactionContributionProvider extends ContentProvider {
     private static final int TRANSACTION_CONTRIBUTIONS = 1;
     private static final int TRANSACTION_CONTRIBUTION = 2;
     private static final int TRANSACTION_CONTRIBUTION_BY_TRANSACTION_DETAIL = 3;
+    private static final int TRANSACTION_CONTRIBUTION_UPSERT = 4;
 
     private static final UriMatcher uriMatcher;
 
@@ -33,6 +34,7 @@ public class TransactionContributionProvider extends ContentProvider {
         uriMatcher.addURI(PROVIDER_NAME, "transaction_contributions", TRANSACTION_CONTRIBUTIONS);
         uriMatcher.addURI(PROVIDER_NAME, "transaction_contributions/#", TRANSACTION_CONTRIBUTION);
         uriMatcher.addURI(PROVIDER_NAME, "transaction_contributions/by_transaction_detail/#", TRANSACTION_CONTRIBUTION_BY_TRANSACTION_DETAIL);
+        uriMatcher.addURI(PROVIDER_NAME, "transaction_contributions/upsert", TRANSACTION_CONTRIBUTION_UPSERT);
     }
 
     /**
@@ -65,6 +67,8 @@ public class TransactionContributionProvider extends ContentProvider {
             return TransactionContributionModel.getTransactionContributionById(mAppDB, uri.getLastPathSegment());
         } else if (uriMatcher.match(uri) == TRANSACTION_CONTRIBUTION_BY_TRANSACTION_DETAIL) {
             return TransactionContributionModel.getTransactionContributionByTransactionDetailId(mAppDB, uri.getLastPathSegment());
+        } else if (uriMatcher.match(uri) == TRANSACTION_CONTRIBUTION_UPSERT) {
+            return TransactionContributionModel.upsertTransactionContribution(mAppDB, selectionArgs[0], selectionArgs[1], selectionArgs[2], selectionArgs[3]);
         } else {
             return null;
         }
@@ -76,6 +80,8 @@ public class TransactionContributionProvider extends ContentProvider {
             return (int) TransactionContributionModel.deleteTransactionContribution(mAppDB, "transactions_details_id=?", selectionArgs);
         } else if (uriMatcher.match(uri) == TRANSACTION_CONTRIBUTION) {
             return (int) TransactionContributionModel.deleteTransactionContribution(mAppDB, "id=?", selectionArgs);
+        } else if (uriMatcher.match(uri) == TRANSACTION_CONTRIBUTION_UPSERT) {
+            return (int) TransactionContributionModel.deleteTransactionContribution(mAppDB, "transactions_details_id=? AND  people_details_id=?", selectionArgs);
         }
         return 0;
     }
