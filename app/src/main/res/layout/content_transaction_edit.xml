@@ -65,6 +65,7 @@
         android:background="#FF0000"
         android:drawableLeft="@android:drawable/ic_menu_delete"
         android:drawableStart="@android:drawable/ic_menu_delete"
+        android:onClick="tranDeleteBtn"
         android:text="Delete"
         android:textAlignment="textStart"
         android:textColor="@android:color/white"

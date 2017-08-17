@@ -190,7 +190,7 @@ public class HomeActivity extends AppCompatActivity
 
         // Start the Transaction Editing Activity
         Intent intent = new Intent(getBaseContext(), TransactionEditActivity.class);
-        intent.putExtra("transaction_id", newTransactionId);
+        intent.putExtra("transaction_id", newTransactionId + "");
         startActivity(intent);
         finish();
     }

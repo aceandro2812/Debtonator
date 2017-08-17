@@ -77,9 +77,9 @@ public class TransactionProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (uriMatcher.match(uri) == TRANSACTION_BY_SET) {
-            return (int) TransactionModel.deleteTransaction(mAppDB, "transaction_sets_id=?", selectionArgs);
+            return (int) TransactionModel.deleteTransaction(mAppDB, "transaction_sets_id=?", new String[]{uri.getLastPathSegment()});
         } else if (uriMatcher.match(uri) == TRANSACTION) {
-            return (int) TransactionModel.deleteTransaction(mAppDB, "id=?", selectionArgs);
+            return (int) TransactionModel.deleteTransaction(mAppDB, "id=?", new String[]{uri.getLastPathSegment()});
         }
         return 0;
     }

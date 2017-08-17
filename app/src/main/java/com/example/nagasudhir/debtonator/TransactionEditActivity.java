@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -143,8 +145,8 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         Date transactionDateTime;
 
         public InitialTransactionDetailState(String transactionDescription, String transactionMetadata, Date transactionDateTime) {
-            this.transactionDescription = transactionDescription == null ? "" : transactionDescription;
-            this.transactionMetadata = transactionMetadata == null ? "" : transactionMetadata;
+            this.transactionDescription = (transactionDescription == null) ? "" : transactionDescription;
+            this.transactionMetadata = (transactionMetadata == null) ? "" : transactionMetadata;
             this.transactionDateTime = transactionDateTime;
         }
     }
@@ -174,6 +176,35 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         } catch (Exception e) {
 
         }
+    }
+
+    /*
+    * When the transaction delete button is pressed
+    * */
+    public void tranDeleteBtn(View v) {
+        new AlertDialog.Builder(TransactionEditActivity.this)
+                .setTitle("Delete Transaction")
+                .setMessage("Are you sure you want to delete this Transaction ?")
+                .setNegativeButton("CANCEL", null)
+                .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        // Changes need not to be saved
+                        mIsStateSaved = true;
+                        int numTransactionDeleted = TransactionEditActivity.this.getContentResolver().delete(Uri.parse(TransactionProvider.CONTENT_URI + "/" + mTransactionId), null, null);
+                        if (numTransactionDeleted == 0) {
+                            Toast.makeText(getApplicationContext(), "Transaction NOT deleted...", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Toast.makeText(getApplicationContext(), "Transaction Deleted!", Toast.LENGTH_SHORT).show();
+                        if (mNextTranId != null) {
+                            nextTranBtn(null);
+                        } else if (mPrevTranId != null) {
+                            prevTranBtn(null);
+                        } else {
+                            homeBtn(null);
+                        }
+                    }
+                }).create().show();
     }
 
     /*
@@ -232,9 +263,9 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
             // Setup the initial Transaction Detail State
             mInitialTransactionDetailState = new InitialTransactionDetailState(mTransactionDesc, mTransactionMetadata, mTransactionDate);
             // Set the views
-            ((EditText) findViewById(R.id.tran_description)).setText(mTransactionDesc);
-            ((EditText) findViewById(R.id.tran_description)).setSelection(mTransactionDesc.length());
-            ((EditText) findViewById(R.id.tran_metadata)).setText(mTransactionMetadata);
+            ((EditText) findViewById(R.id.tran_description)).setText(mInitialTransactionDetailState.transactionDescription);
+            ((EditText) findViewById(R.id.tran_description)).setSelection(mInitialTransactionDetailState.transactionDescription.length());
+            ((EditText) findViewById(R.id.tran_metadata)).setText(mInitialTransactionDetailState.transactionMetadata);
             ((Button) findViewById(R.id.tran_date_btn)).setText((new SimpleDateFormat("dd/MM/yyyy")).format(mTransactionDate));
             ((Button) findViewById(R.id.tran_time_btn)).setText((new SimpleDateFormat("HH:mm")).format(mTransactionDate));
         }
@@ -327,26 +358,30 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
         // Populate the adapter list items
         try {
-            while (cursor.moveToNext()) {
-                TransactionContributionListItem transactionContributionListItem = new TransactionContributionListItem();
+            try {
+                while (cursor.moveToNext()) {
+                    TransactionContributionListItem transactionContributionListItem = new TransactionContributionListItem();
 
-                transactionContributionListItem.setId(cursor.getString(cursor.getColumnIndex(TransactionContributionModel.KEY_ROW_ID)));
-                transactionContributionListItem.setContribution(cursor.getString(cursor.getColumnIndex(TransactionContributionModel.KEY_CONTRIBUTION)));
-                transactionContributionListItem.setPersonId(cursor.getString(cursor.getColumnIndex("_id")));
-                transactionContributionListItem.setTransactionsDetailsId(mTransactionId);
-                transactionContributionListItem.setPersonName(cursor.getString(cursor.getColumnIndex(KEY_USERNAME)));
-                String isConsumerText = cursor.getString(cursor.getColumnIndex(TransactionContributionModel.KEY_IS_CONSUMER));
-                try {
-                    transactionContributionListItem.setConsumer(Integer.parseInt(isConsumerText) == 0 ? false : true);
-                } catch (Exception e) {
-                    transactionContributionListItem.setConsumer(false);
+                    transactionContributionListItem.setId(cursor.getString(cursor.getColumnIndex(TransactionContributionModel.KEY_ROW_ID)));
+                    transactionContributionListItem.setContribution(cursor.getString(cursor.getColumnIndex(TransactionContributionModel.KEY_CONTRIBUTION)));
+                    transactionContributionListItem.setPersonId(cursor.getString(cursor.getColumnIndex("_id")));
+                    transactionContributionListItem.setTransactionsDetailsId(mTransactionId);
+                    transactionContributionListItem.setPersonName(cursor.getString(cursor.getColumnIndex(KEY_USERNAME)));
+                    String isConsumerText = cursor.getString(cursor.getColumnIndex(TransactionContributionModel.KEY_IS_CONSUMER));
+                    try {
+                        transactionContributionListItem.setConsumer(Integer.parseInt(isConsumerText) != 0);
+                    } catch (Exception e) {
+                        transactionContributionListItem.setConsumer(false);
+                    }
+
+                    mTransactionContributionsList.add(transactionContributionListItem);
                 }
-
-                mTransactionContributionsList.add(transactionContributionListItem);
+            } finally {
+                cursor.close();
+                setUpTransactionContributionListAdapter();
             }
-        } finally {
-            cursor.close();
-            setUpTransactionContributionListAdapter();
+        } catch (Exception e) {
+
         }
     }
 
