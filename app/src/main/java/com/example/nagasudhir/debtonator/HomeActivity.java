@@ -1,5 +1,6 @@
 package com.example.nagasudhir.debtonator;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -128,8 +130,7 @@ public class HomeActivity extends AppCompatActivity
         addTranFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                createNewTransactionAndView();
             }
         });
 
@@ -162,6 +163,35 @@ public class HomeActivity extends AppCompatActivity
         // Finish this activity and start the Transaction Set List Displaying Activity
         Intent TransactionSetsDisplayIntent = new Intent(getBaseContext(), TransactionSetsActivity.class);
         startActivity(TransactionSetsDisplayIntent);
+        finish();
+    }
+
+    /*
+    * Create a new transaction and open the screen
+    * */
+    public void createNewTransactionAndView() {
+        ContentValues insertValues = new ContentValues();
+        insertValues.put(TransactionModel.KEY_DESCRIPTION, "");
+        insertValues.put(TransactionModel.KEY_METADATA, "");
+        insertValues.put(TransactionModel.KEY_TRANSACTION_SET_ID, mTransactionSetId);
+        Uri newTransactionUri = getContentResolver().insert(TransactionProvider.CONTENT_URI, insertValues);
+        int newTransactionId = -1;
+        try {
+            newTransactionId = Integer.parseInt(newTransactionUri.getLastPathSegment());
+        } catch (Exception e) {
+            Toast.makeText(this, "New Transaction NOT created...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (newTransactionId == -1) {
+            Toast.makeText(this, "New Transaction NOT created...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(this, "New Transaction created !", Toast.LENGTH_SHORT).show();
+
+        // Start the Transaction Editing Activity
+        Intent intent = new Intent(getBaseContext(), TransactionEditActivity.class);
+        intent.putExtra("transaction_id", newTransactionId);
+        startActivity(intent);
         finish();
     }
 

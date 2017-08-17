@@ -143,8 +143,8 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         Date transactionDateTime;
 
         public InitialTransactionDetailState(String transactionDescription, String transactionMetadata, Date transactionDateTime) {
-            this.transactionDescription = transactionDescription;
-            this.transactionMetadata = transactionMetadata;
+            this.transactionDescription = transactionDescription == null ? "" : transactionDescription;
+            this.transactionMetadata = transactionMetadata == null ? "" : transactionMetadata;
             this.transactionDateTime = transactionDateTime;
         }
     }
@@ -154,10 +154,14 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
             if (mTransactionId != null && mInitialTransactionDetailState != null) {
                 String descText = ((EditText) findViewById(R.id.tran_description)).getText().toString().trim();
                 String metaDataText = ((EditText) findViewById(R.id.tran_metadata)).getText().toString().trim();
-                mInitialTransactionDetailState.transactionDescription = mInitialTransactionDetailState.transactionDescription.trim();
+                if (mInitialTransactionDetailState.transactionDescription == null) {
+                    mInitialTransactionDetailState.transactionDescription = "";
+                }
                 if (mInitialTransactionDetailState.transactionMetadata == null) {
                     mInitialTransactionDetailState.transactionMetadata = "";
                 }
+                mInitialTransactionDetailState.transactionDescription = mInitialTransactionDetailState.transactionDescription.trim();
+                mInitialTransactionDetailState.transactionMetadata = mInitialTransactionDetailState.transactionMetadata.trim();
                 if ((mInitialTransactionDetailState.transactionDateTime.getTime() != mTransactionDate.getTime()) || !mInitialTransactionDetailState.transactionDescription.equals(descText) || !mInitialTransactionDetailState.transactionMetadata.equals(metaDataText)) {
                     ContentValues updatedValues = new ContentValues();
                     updatedValues.put(TransactionModel.KEY_DESCRIPTION, descText);
