@@ -1,5 +1,6 @@
 package com.example.nagasudhir.debtonator;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
@@ -16,7 +17,10 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -66,10 +70,11 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
 
         // Setting up the Transactions list
         mTransactionsContributionsListView = (ListView) findViewById(R.id.tran_contr_list);
-
         /* Creating a loader for populating listview from sqlite database */
         /* This statement, invokes the method onCreatedLoader() */
         getSupportLoaderManager().initLoader(0, null, this);
+
+        setupUI(findViewById(R.id.transaction_edit_constraint_layout));
     }
 
     @Override
@@ -96,6 +101,36 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         homeBtn(null);
     }
 
+    public void setupUI(View view) {
+        //Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View arg0, MotionEvent arg1) {
+                    hideSoftKeyboard();
+                    return false;
+                }
+
+            });
+        }
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
+
+    protected void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+    }
+
     private void saveChangesToDB() {
         mIsStateSaved = true;
         mTransactionContributionsArrayAdapter.updateAllDirtyContributionItemsToDB();
@@ -108,17 +143,21 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         Date transactionDateTime;
 
         public InitialTransactionDetailState(String transactionDescription, String transactionMetadata, Date transactionDateTime) {
-            this.transactionDescription = new String(transactionDescription);
-            this.transactionMetadata = new String(transactionMetadata);
-            this.transactionDateTime = new Date(transactionDateTime.getTime());
+            this.transactionDescription = transactionDescription;
+            this.transactionMetadata = transactionMetadata;
+            this.transactionDateTime = transactionDateTime;
         }
     }
 
     private void saveTransactionDetailsChanges() {
         try {
             if (mTransactionId != null && mInitialTransactionDetailState != null) {
-                String descText = ((EditText) findViewById(R.id.tran_description)).getText().toString();
-                String metaDataText = ((EditText) findViewById(R.id.tran_metadata)).getText().toString();
+                String descText = ((EditText) findViewById(R.id.tran_description)).getText().toString().trim();
+                String metaDataText = ((EditText) findViewById(R.id.tran_metadata)).getText().toString().trim();
+                mInitialTransactionDetailState.transactionDescription = mInitialTransactionDetailState.transactionDescription.trim();
+                if (mInitialTransactionDetailState.transactionMetadata == null) {
+                    mInitialTransactionDetailState.transactionMetadata = "";
+                }
                 if ((mInitialTransactionDetailState.transactionDateTime.getTime() != mTransactionDate.getTime()) || !mInitialTransactionDetailState.transactionDescription.equals(descText) || !mInitialTransactionDetailState.transactionMetadata.equals(metaDataText)) {
                     ContentValues updatedValues = new ContentValues();
                     updatedValues.put(TransactionModel.KEY_DESCRIPTION, descText);
@@ -190,6 +229,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
             mInitialTransactionDetailState = new InitialTransactionDetailState(mTransactionDesc, mTransactionMetadata, mTransactionDate);
             // Set the views
             ((EditText) findViewById(R.id.tran_description)).setText(mTransactionDesc);
+            ((EditText) findViewById(R.id.tran_description)).setSelection(mTransactionDesc.length());
             ((EditText) findViewById(R.id.tran_metadata)).setText(mTransactionMetadata);
             ((Button) findViewById(R.id.tran_date_btn)).setText((new SimpleDateFormat("dd/MM/yyyy")).format(mTransactionDate));
             ((Button) findViewById(R.id.tran_time_btn)).setText((new SimpleDateFormat("HH:mm")).format(mTransactionDate));

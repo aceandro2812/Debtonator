@@ -35,7 +35,7 @@ public class Infix {
             try {
                 return Double.parseDouble(lastOne);
             } catch (Exception e) {
-                return 0;
+                throw e;
             }
         }
     }
@@ -62,11 +62,7 @@ public class Infix {
             } else {
                 String firstValue = (String) values.pop();
                 String secondValue;
-                try {
-                    secondValue = (String) values.pop();
-                } catch (Exception e) {
-                    secondValue = "0";
-                }
+                secondValue = (String) values.pop();
                 values.push(getResults(secondValue, second, firstValue));
                 operators.push(first);
             }
@@ -81,15 +77,13 @@ public class Infix {
             op1 = Double.parseDouble(operand1);
 
         } catch (Exception e) {
-            op1 = 0;
-
+            throw e;
         }
         try {
             op2 = Double.parseDouble(operand2);
 
         } catch (Exception e) {
-            op2 = 0;
-
+            throw e;
         }
         if (operator.equals("*"))
             return "" + (op1 * op2);

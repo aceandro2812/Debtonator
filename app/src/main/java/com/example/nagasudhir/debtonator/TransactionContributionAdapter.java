@@ -6,14 +6,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -70,6 +73,45 @@ public class TransactionContributionAdapter extends ArrayAdapter<TransactionCont
         mViewHolder.contributionEditText.setTag(R.id.tran_contribution, position);
         //mViewHolder.contributionEditText.setOnEditorActionListener(this);
         mViewHolder.contributionEditText.addTextChangedListener(new MyTextWatcher(mViewHolder.contributionEditText));
+        mViewHolder.contributionEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    // Hide the soft Keyboard
+                    InputMethodManager imm = (InputMethodManager) v.getContext()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    // Evaluate the infix value of the contribution edit text
+                    final int position = (int) v.getTag(R.id.tran_contribution);
+                    String str = ((EditText) v).getText().toString();
+                    Double contributionValue = 0.0;
+                    try {
+                        contributionValue = Infix.infix(str);
+                    } catch (Exception e) {
+                        // The infix evaluation is not successful so don't do anything
+                        Toast.makeText(mContext, "Invalid Expression", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    String contributionText = contributionValue + "";
+                    if ((contributionValue == Math.floor(contributionValue))) {
+                        // contributionValue is integer type
+                        contributionText = contributionValue.intValue() + "";
+                    }
+
+                    // update the objects list
+                    transactionContributionItemsList.get(position).setContribution(contributionText);
+
+                    // Change the Edit Text
+                    ((EditText) v).setText(contributionText);
+                    ((EditText) v).setSelection(contributionText.length());
+                    return true;
+                }
+                return false;
+            }
+        });
         return convertView;
     }
 
@@ -108,13 +150,14 @@ public class TransactionContributionAdapter extends ArrayAdapter<TransactionCont
         public void afterTextChanged(Editable s) {
             if (contributionEditTextView.hasFocus()) {
                 final int position = (int) contributionEditTextView.getTag(R.id.tran_contribution);
-                if (!Infix.checkSemantics(contributionEditTextView.getText().toString())) {
-                    // failed to pass the semantics test do nothing
-                    //contributionEditTextView.setText(transactionContributionItemsList.get(position).getContribution());
+                // Do infix evaluation and save the contribution data
+                Double contributionValue = 0.0;
+                try {
+                    contributionValue = Infix.infix(contributionEditTextView.getText().toString());
+                } catch (Exception e) {
+                    // The infix evaluation is not successful so don't do anything
                     return;
                 }
-                // semantics are passed so do infix evaluation and save the contribution data
-                Double contributionValue = Infix.infix(contributionEditTextView.getText().toString());
                 String contributionText = contributionValue + "";
                 if ((contributionValue == Math.floor(contributionValue))) {
                     // contributionValue is integer type
