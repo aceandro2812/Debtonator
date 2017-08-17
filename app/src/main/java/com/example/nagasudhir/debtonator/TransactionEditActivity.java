@@ -42,6 +42,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     InitialTransactionDetailState mInitialTransactionDetailState;
     String mNextTranId = null;
     String mPrevTranId = null;
+    boolean mIsStateSaved = false;
     ArrayList<TransactionContributionListItem> mTransactionContributionsList = new ArrayList<TransactionContributionListItem>();
     TransactionContributionAdapter mTransactionContributionsArrayAdapter;
 
@@ -85,13 +86,20 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     @Override
     protected void onStop() {
         super.onStop();
-        mTransactionContributionsArrayAdapter.updateAllDirtyContributionItemsToDB();
-        saveTransactionDetailsChanges();
+        if (!mIsStateSaved) {
+            saveChangesToDB();
+        }
     }
 
     @Override
     public void onBackPressed() {
         homeBtn(null);
+    }
+
+    private void saveChangesToDB() {
+        mIsStateSaved = true;
+        mTransactionContributionsArrayAdapter.updateAllDirtyContributionItemsToDB();
+        saveTransactionDetailsChanges();
     }
 
     private class InitialTransactionDetailState {
@@ -129,6 +137,10 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     * When the 'home' button is clicked
     * */
     public void homeBtn(View v) {
+        // save the changes
+        if (!mIsStateSaved) {
+            saveChangesToDB();
+        }
         // starts a new Intent to open home page
         Intent HomePageIntent = new Intent(getBaseContext(), HomeActivity.class);
         startActivity(HomePageIntent);
