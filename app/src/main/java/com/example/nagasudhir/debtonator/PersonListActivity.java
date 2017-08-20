@@ -60,7 +60,9 @@ public class PersonListActivity extends AppCompatActivity implements LoaderManag
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // todo create a new person button listener
+                Intent personCreateIntent = new Intent(getBaseContext(), PersonCreateActivity.class);
+                startActivity(personCreateIntent);
+                finish();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

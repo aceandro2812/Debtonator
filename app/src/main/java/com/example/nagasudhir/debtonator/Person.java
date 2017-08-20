@@ -77,7 +77,7 @@ public class Person extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return (int) PersonModel.deletePerson(mAppDB, "id=?", selectionArgs);
+        return (int) PersonModel.deletePerson(mAppDB, selection, selectionArgs);
     }
 
     @Override

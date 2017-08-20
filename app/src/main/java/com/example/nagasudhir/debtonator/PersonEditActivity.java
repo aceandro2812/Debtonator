@@ -1,16 +1,20 @@
 package com.example.nagasudhir.debtonator;
 
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class PersonEditActivity extends AppCompatActivity {
 
@@ -64,14 +68,38 @@ public class PersonEditActivity extends AppCompatActivity {
     * Save Person Edits Button
     * */
     public void savePersonEditsBtn(View v) {
-
+        ContentValues updatePersonContentValues = new ContentValues();
+        updatePersonContentValues.put(PersonModel.KEY_USERNAME, ((EditText) findViewById(R.id.person_edit_name)).getText().toString().trim());
+        updatePersonContentValues.put(PersonModel.KEY_PHONE_NUMBER, ((EditText) findViewById(R.id.person_edit_phone)).getText().toString().trim());
+        updatePersonContentValues.put(PersonModel.KEY_EMAIL_ID, ((EditText) findViewById(R.id.person_edit_email)).getText().toString().trim());
+        updatePersonContentValues.put(PersonModel.KEY_METADATA, ((EditText) findViewById(R.id.person_edit_metadata)).getText().toString().trim());
+        int numPersonsUpdated = PersonEditActivity.this.getContentResolver().update(Uri.parse(Person.CONTENT_URI + "/" + mPersonId), updatePersonContentValues, PersonModel.KEY_ROW_ID + "=?", new String[]{mPersonId});
+        if (numPersonsUpdated > 0) {
+            Toast.makeText(this, "Details UPDATED!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Details NOT updated. Try Again...", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /*
     * Delete Person Button
     * */
     public void deletePersonBtn(View v) {
-
+        new AlertDialog.Builder(PersonEditActivity.this)
+                .setTitle("Delete Person")
+                .setMessage("Are you sure you want to delete " + mPersonName + " ?")
+                .setNegativeButton("CANCEL", null)
+                .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        int numPersonsDeleted = PersonEditActivity.this.getContentResolver().delete(Uri.parse(Person.CONTENT_URI + "/" + mPersonId), PersonModel.KEY_ROW_ID + "=?", new String[]{mPersonId});
+                        if (numPersonsDeleted == 0) {
+                            Toast.makeText(getApplicationContext(), "Person NOT deleted...", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Toast.makeText(getApplicationContext(), "Person Deleted!", Toast.LENGTH_SHORT).show();
+                        backBtn(null);
+                    }
+                }).create().show();
     }
 
     // Class with extends AsyncTask class
