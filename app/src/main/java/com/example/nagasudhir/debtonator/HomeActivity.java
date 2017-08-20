@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -118,12 +117,14 @@ public class HomeActivity extends AppCompatActivity
 
         mPersonsListView.setAdapter(mPersonsAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_manage_persons);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton managePeopleFab = (FloatingActionButton) findViewById(R.id.fab_manage_persons);
+        managePeopleFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // Finish this activity and start the Transaction Set List Displaying Activity
+                Intent personListIntent = new Intent(getBaseContext(), PersonListActivity.class);
+                startActivity(personListIntent);
+                finish();
             }
         });
         FloatingActionButton addTranFab = (FloatingActionButton) findViewById(R.id.fab_add_tran);
@@ -161,8 +162,8 @@ public class HomeActivity extends AppCompatActivity
         editor.putString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, null);
         editor.apply();
         // Finish this activity and start the Transaction Set List Displaying Activity
-        Intent TransactionSetsDisplayIntent = new Intent(getBaseContext(), TransactionSetsActivity.class);
-        startActivity(TransactionSetsDisplayIntent);
+        Intent transactionSetsDisplayIntent = new Intent(getBaseContext(), TransactionSetsActivity.class);
+        startActivity(transactionSetsDisplayIntent);
         finish();
     }
 

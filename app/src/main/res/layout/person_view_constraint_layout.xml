@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/person_view_name_label"
+        app:layout_constraintBottom_toBottomOf="@+id/person_view_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="8dp"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/person_view_name"
+        app:layout_constraintLeft_toRightOf="@id/person_view_name_label"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Person Name"
+        android:textSize="24dp" />
+
+    <TextView
+        android:id="@+id/person_view_phone_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Phone" />
+
+    <TextView
+        android:id="@+id/person_view_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Phone Number"
+        app:layout_constraintLeft_toRightOf="@+id/person_view_phone_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_name" />
+
+    <TextView
+        android:id="@+id/person_view_email_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Email"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_phone_label" />
+
+    <TextView
+        android:id="@+id/person_view_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Email Address"
+        app:layout_constraintLeft_toRightOf="@+id/person_view_email_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_phone" />
+
+    <TextView
+        android:id="@+id/person_view_metadata_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Notes"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_email_label" />
+
+    <TextView
+        android:id="@+id/person_view_metadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Metadata"
+        app:layout_constraintLeft_toRightOf="@+id/person_view_metadata_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_email" />
+
+    <TextView
+        android:id="@+id/person_view_created_at_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Created At"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_metadata_label" />
+
+    <TextView
+        android:id="@+id/person_view_created_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Creation Date Time"
+        app:layout_constraintLeft_toRightOf="@+id/person_view_created_at_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_metadata" />
+
+    <TextView
+        android:id="@+id/person_view_updated_at_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Updated At"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_created_at_label" />
+
+    <TextView
+        android:id="@+id/person_view_updated_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Recent Updation Date Time"
+        app:layout_constraintLeft_toRightOf="@+id/person_view_updated_at_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_created_at" />
+</android.support.constraint.ConstraintLayout>

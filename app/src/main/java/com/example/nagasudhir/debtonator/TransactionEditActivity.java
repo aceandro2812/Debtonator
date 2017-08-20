@@ -59,8 +59,8 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Get the transaction set Id to load from shared preferences
 
+        // Get the transaction set Id to load from shared preferences
         SharedPreferences mSharedPrefs = getSharedPreferences(GlobalVarClass.SHARED_PREFS_KEY, MODE_PRIVATE);
         mTransactionSetId = mSharedPrefs.getString(GlobalVarClass.CURRENT_TRAN_SET_ID_KEY, null);
         if (mTransactionSetId == null) {

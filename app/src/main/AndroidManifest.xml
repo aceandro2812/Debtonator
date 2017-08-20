@@ -48,14 +48,32 @@
         <activity
             android:name=".TransactionEditActivity"
             android:label="@string/title_activity_transaction_edit"
-            android:parentActivityName="com.example.nagasudhir.debtonator.HomeActivity"
+            android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagasudhir.debtonator.HomeActivity" />
-
+        </activity>
+        <activity
+            android:name=".PersonListActivity"
+            android:label="@string/title_activity_person_list"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagasudhir.debtonator.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".PersonViewActivity"
+            android:label="@string/title_activity_person_view"
+            android:parentActivityName=".PersonListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagasudhir.debtonator.PersonListActivity" />
         </activity>
     </application>
 
