@@ -75,6 +75,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagasudhir.debtonator.PersonListActivity" />
         </activity>
+        <activity
+            android:name=".PersonEditActivity"
+            android:label="@string/title_activity_person_edit"
+            android:parentActivityName=".PersonListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagasudhir.debtonator.PersonListActivity" />
+        </activity>
     </application>
 
 </manifest>

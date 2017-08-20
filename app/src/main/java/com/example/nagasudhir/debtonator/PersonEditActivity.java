@@ -6,53 +6,33 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
-public class PersonViewActivity extends AppCompatActivity {
+public class PersonEditActivity extends AppCompatActivity {
 
     private String mPersonId = null;
     private String mPersonName = null;
     private String mPersonPhone = null;
     private String mPersonEmail = null;
     private String mPersonMetadata = null;
-    private String mPersonCreatedAt = null;
-    private String mPersonUpdatedAt = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_person_view);
+        setContentView(R.layout.activity_person_edit);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         Intent intent = getIntent();
         mPersonId = intent.getExtras().getString("person_id");
         if (mPersonId == null) {
             backBtn(null);
         }
 
-        // Display the person Name
-        //setTitleOfActivity(mPersonId);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.person_edit_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent personEditDeleteIntent = new Intent(getBaseContext(), PersonEditActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("person_id", mPersonId);
-                personEditDeleteIntent.putExtras(bundle);
-                startActivity(personEditDeleteIntent);
-                finish();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         // Fetch and populate the person details
         new LongOperation().execute();
     }
@@ -80,8 +60,18 @@ public class PersonViewActivity extends AppCompatActivity {
         finish();
     }
 
-    private void setTitleOfActivity(String titleStr) {
-        getSupportActionBar().setTitle(titleStr);
+    /*
+    * Save Person Edits Button
+    * */
+    public void savePersonEditsBtn(View v) {
+
+    }
+
+    /*
+    * Delete Person Button
+    * */
+    public void deletePersonBtn(View v) {
+
     }
 
     // Class with extends AsyncTask class
@@ -96,16 +86,13 @@ public class PersonViewActivity extends AppCompatActivity {
             try {
                 // Call long running operations here (perform background computation)
                 // NOTE: Don't call UI Element here.
-                Cursor personCursor = PersonViewActivity.this.getContentResolver().query(Uri.parse(Person.CONTENT_URI + "/" + mPersonId), null, null, null, null);
+                Cursor personCursor = PersonEditActivity.this.getContentResolver().query(Uri.parse(Person.CONTENT_URI + "/" + mPersonId), null, null, null, null);
                 try {
                     if (personCursor.moveToNext()) {
                         mPersonName = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_USERNAME));
                         mPersonPhone = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_PHONE_NUMBER));
                         mPersonEmail = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_EMAIL_ID));
                         mPersonMetadata = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_METADATA));
-                        mPersonCreatedAt = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_CREATED_AT));
-                        mPersonUpdatedAt = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_UPDATED_AT));
-
                     }
                 } finally {
                     personCursor.close();
@@ -121,13 +108,12 @@ public class PersonViewActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused) {
             // NOTE: You can call UI Element here.
             // Setup the initial Transaction Detail State
-            setTitleOfActivity(mPersonName);
-            ((TextView) findViewById(R.id.person_view_name)).setText(mPersonName);
-            ((TextView) findViewById(R.id.person_view_email)).setText(mPersonEmail);
-            ((TextView) findViewById(R.id.person_view_phone)).setText(mPersonPhone);
-            ((TextView) findViewById(R.id.person_view_metadata)).setText(mPersonMetadata);
-            ((TextView) findViewById(R.id.person_view_created_at)).setText(mPersonCreatedAt);
-            ((TextView) findViewById(R.id.person_view_updated_at)).setText(mPersonUpdatedAt);
+            //setTitleOfActivity(mPersonName);
+            ((EditText) findViewById(R.id.person_edit_name)).setText(mPersonName);
+            ((EditText) findViewById(R.id.person_edit_email)).setText(mPersonEmail);
+            ((EditText) findViewById(R.id.person_edit_phone)).setText(mPersonPhone);
+            ((EditText) findViewById(R.id.person_edit_metadata)).setText(mPersonMetadata);
         }
     }
+
 }
