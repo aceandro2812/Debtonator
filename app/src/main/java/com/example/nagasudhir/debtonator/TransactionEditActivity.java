@@ -208,6 +208,43 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     }
 
     /*
+    * When the transaction add button is pressed
+    * */
+    public void addTranBtn(View v) {
+        createNewTransactionAndView();
+    }
+
+    /*
+    * Create a new transaction and open the screen
+    * */
+    public void createNewTransactionAndView() {
+        ContentValues insertValues = new ContentValues();
+        insertValues.put(TransactionModel.KEY_DESCRIPTION, "");
+        insertValues.put(TransactionModel.KEY_METADATA, "");
+        insertValues.put(TransactionModel.KEY_TRANSACTION_SET_ID, mTransactionSetId);
+        insertValues.put(TransactionModel.KEY_TRANSACTION_TIME, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
+        Uri newTransactionUri = getContentResolver().insert(TransactionProvider.CONTENT_URI, insertValues);
+        int newTransactionId = -1;
+        try {
+            newTransactionId = Integer.parseInt(newTransactionUri.getLastPathSegment());
+        } catch (Exception e) {
+            Toast.makeText(this, "ERROR creating new Transaction...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (newTransactionId == -1) {
+            Toast.makeText(this, "New Transaction NOT created...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(this, "New Transaction created !", Toast.LENGTH_SHORT).show();
+
+        // Start the Transaction Editing Activity
+        Intent intent = new Intent(getBaseContext(), TransactionEditActivity.class);
+        intent.putExtra("transaction_id", newTransactionId + "");
+        startActivity(intent);
+        finish();
+    }
+
+    /*
     * When the 'home' button is clicked
     * */
     public void homeBtn(View v) {

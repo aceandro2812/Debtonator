@@ -112,20 +112,23 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        app:backgroundTint="#039BE5"
         app:layout_constraintBottom_toBottomOf="@+id/personList"
         app:layout_constraintRight_toRightOf="@+id/personList"
-        app:srcCompat="@android:drawable/ic_dialog_email"
-        android:layout_marginEnd="16dp" />
+        app:srcCompat="@drawable/ic_people_24dp" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_tran"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email"
-        app:layout_constraintBottom_toBottomOf="@+id/tranList"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/tranList" />
+        app:backgroundTint="#43A047"
+        app:layout_constraintBottom_toBottomOf="@+id/tranList"
+        app:layout_constraintRight_toRightOf="@+id/tranList"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 </android.support.constraint.ConstraintLayout>

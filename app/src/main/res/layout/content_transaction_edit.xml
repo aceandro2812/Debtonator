@@ -46,6 +46,7 @@
         android:background="@android:color/holo_green_dark"
         android:drawableLeft="@android:drawable/ic_menu_add"
         android:drawableStart="@android:drawable/ic_menu_add"
+        android:onClick="addTranBtn"
         android:text="ADD"
         android:textAlignment="textStart"
         android:textColor="@android:color/white"

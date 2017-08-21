@@ -206,7 +206,7 @@ public class HomeActivity extends AppCompatActivity
         try {
             newTransactionId = Integer.parseInt(newTransactionUri.getLastPathSegment());
         } catch (Exception e) {
-            Toast.makeText(this, "New Transaction NOT created...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "ERROR creating new Transaction...", Toast.LENGTH_SHORT).show();
             return;
         }
         if (newTransactionId == -1) {
