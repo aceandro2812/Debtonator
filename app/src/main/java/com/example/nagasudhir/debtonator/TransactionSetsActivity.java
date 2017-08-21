@@ -282,7 +282,7 @@ public class TransactionSetsActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            homeBtn(null);
+            finish();
         }
     }
 

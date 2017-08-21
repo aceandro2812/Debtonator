@@ -35,9 +35,12 @@ public class PersonViewActivity extends AppCompatActivity {
         if (mPersonId == null) {
             backBtn(null);
         }
+        mPersonName = intent.getExtras().getString("person_name");
+        if (mPersonName != null) {
+            // Display the person Name
+            setTitleOfActivity(mPersonName);
+        }
 
-        // Display the person Name
-        //setTitleOfActivity(mPersonId);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.person_edit_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +124,6 @@ public class PersonViewActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused) {
             // NOTE: You can call UI Element here.
             // Setup the initial Transaction Detail State
-            setTitleOfActivity(mPersonName);
             ((TextView) findViewById(R.id.person_view_name)).setText(mPersonName);
             ((TextView) findViewById(R.id.person_view_email)).setText(mPersonEmail);
             ((TextView) findViewById(R.id.person_view_phone)).setText(mPersonPhone);

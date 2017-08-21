@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -115,6 +117,29 @@ public class HomeActivity extends AppCompatActivity
                 new String[]{PersonModel.KEY_USERNAME, "_id", PersonModel.VARIABLE_PERSON_BALANCE},
                 new int[]{R.id.person_name, R.id.person_id, R.id.person_balance}, 0);
 
+        mPersonsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                try {
+                    if (columnIndex == cursor.getColumnIndexOrThrow(PersonModel.VARIABLE_PERSON_BALANCE)) {
+                        TextView textView = (TextView) view;
+                        Double personBalance = cursor.getDouble(columnIndex);
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        df.setPositivePrefix("+");
+                        textView.setText(df.format(personBalance));
+                        if (personBalance > 0) {
+                            textView.setTextColor(Color.parseColor("#4CAF50"));
+                        } else if (personBalance < 0) {
+                            textView.setTextColor(Color.parseColor("#FF9800"));
+                        }
+                        return true;
+                    }
+                } catch (Exception e) {
+
+                }
+                return false;
+            }
+        });
+
         mPersonsListView.setAdapter(mPersonsAdapter);
 
         FloatingActionButton managePeopleFab = (FloatingActionButton) findViewById(R.id.fab_manage_persons);
@@ -175,6 +200,7 @@ public class HomeActivity extends AppCompatActivity
         insertValues.put(TransactionModel.KEY_DESCRIPTION, "");
         insertValues.put(TransactionModel.KEY_METADATA, "");
         insertValues.put(TransactionModel.KEY_TRANSACTION_SET_ID, mTransactionSetId);
+        insertValues.put(TransactionModel.KEY_TRANSACTION_TIME, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
         Uri newTransactionUri = getContentResolver().insert(TransactionProvider.CONTENT_URI, insertValues);
         int newTransactionId = -1;
         try {

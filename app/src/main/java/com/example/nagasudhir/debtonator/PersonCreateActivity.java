@@ -63,7 +63,7 @@ public class PersonCreateActivity extends AppCompatActivity {
         try {
             newPersonId = Integer.parseInt(newPersonUri.getLastPathSegment());
         } catch (Exception e) {
-            Toast.makeText(this, "New Person NOT created...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "ERROR in creating Person...", Toast.LENGTH_SHORT).show();
             return;
         }
         if (newPersonId == -1) {
@@ -76,6 +76,7 @@ public class PersonCreateActivity extends AppCompatActivity {
         Intent personViewIntent = new Intent(getBaseContext(), PersonViewActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("person_id", newPersonId + "");
+        bundle.putString("person_name", personName);
         personViewIntent.putExtras(bundle);
         startActivity(personViewIntent);
         finish();

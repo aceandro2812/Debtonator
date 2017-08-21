@@ -8,7 +8,7 @@
     <string name="title_activity_transaction_sets">Transaction Sets</string>
     <string name="title_activity_transaction_edit">Edit Transaction</string>
     <string name="title_activity_person_list">People</string>
-    <string name="title_activity_person_view">Person</string>
+    <string name="title_activity_person_view">View Person</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

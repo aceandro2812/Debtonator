@@ -47,6 +47,7 @@ public class PersonListActivity extends AppCompatActivity implements LoaderManag
                 Intent personViewIntent = new Intent(getBaseContext(), PersonViewActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("person_id", personId);
+                bundle.putString("person_name", personName);
                 personViewIntent.putExtras(bundle);
                 startActivity(personViewIntent);
                 finish();
