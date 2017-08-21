@@ -147,7 +147,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         public InitialTransactionDetailState(String transactionDescription, String transactionMetadata, Date transactionDateTime) {
             this.transactionDescription = (transactionDescription == null) ? "" : transactionDescription;
             this.transactionMetadata = (transactionMetadata == null) ? "" : transactionMetadata;
-            this.transactionDateTime = transactionDateTime;
+            this.transactionDateTime = new Date(transactionDateTime.getTime());
         }
     }
 
