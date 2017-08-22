@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,7 +43,7 @@ import static com.example.nagasudhir.debtonator.PersonModel.KEY_USERNAME;
 public class TransactionEditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     ListView mTransactionsContributionsListView;
-    MultiAutoCompleteTextView mTransactionTagsTextView = (MultiAutoCompleteTextView) findViewById(R.id.transaction_edit_categories_tv);
+    MultiAutoCompleteTextView mTransactionTagsTextView;
     String mTransactionSetId = null;
     String mTransactionId = null;
     String mTransactionDesc = null;
@@ -54,6 +55,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     boolean mIsStateSaved = false;
     ArrayList<TransactionContributionListItem> mTransactionContributionsList = new ArrayList<TransactionContributionListItem>();
     ArrayList<String> mTransactionTagSuggestionsList = new ArrayList<String>();
+    ArrayList<String> mInitialTransactionTagList = new ArrayList<String>();
     TransactionContributionAdapter mTransactionContributionsArrayAdapter;
 
     @Override
@@ -77,6 +79,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         // Setting up the Transactions list
         mTransactionsContributionsListView = (ListView) findViewById(R.id.tran_contr_list);
 
+        mTransactionTagsTextView = (MultiAutoCompleteTextView) findViewById(R.id.transaction_edit_categories_tv);
         mTransactionTagsTextView.setThreshold(1);
 
         mTransactionTagsTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
@@ -146,6 +149,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         mIsStateSaved = true;
         mTransactionContributionsArrayAdapter.updateAllDirtyContributionItemsToDB();
         saveTransactionDetailsChanges();
+        saveTransactionTagsChanges();
     }
 
     private class InitialTransactionDetailState {
@@ -182,6 +186,53 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
                     getContentResolver().update(TransactionProvider.CONTENT_URI, updatedValues, "id=?", new String[]{mTransactionId});
                 }
             }
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void saveTransactionTagsChanges() {
+        // Get the transaction tags from text view into an array list
+        ArrayList<String> finalTags = new ArrayList<String>(Arrays.asList(mTransactionTagsTextView.getText().toString().split(",")));
+
+        // Trimming the tags
+        for (int i = 0; i < finalTags.size(); i++) {
+            finalTags.set(i, finalTags.get(i).trim());
+        }
+
+        // Get the insertion List
+        ArrayList<String> tagDeletionList = new ArrayList<String>();
+        ArrayList<String> tagInsertionList = new ArrayList<String>();
+
+        for (int i = 0; i < finalTags.size(); i++) {
+            if (mInitialTransactionTagList.indexOf(finalTags.get(i)) == -1) {
+                String str = finalTags.get(i);
+                if (!str.equals("")) {
+                    tagInsertionList.add(str);
+                }
+            }
+        }
+
+        // Get the deletion list
+        for (int i = 0; i < mInitialTransactionTagList.size(); i++) {
+            if (finalTags.indexOf(mInitialTransactionTagList.get(i)) == -1) {
+                tagDeletionList.add(mInitialTransactionTagList.get(i));
+            }
+        }
+        try {
+            // Do the deletion
+            ContentValues updatedValues = new ContentValues();
+            for (int i = 0; i < tagDeletionList.size(); i++) {
+                getContentResolver().delete(TransactionTagProvider.CONTENT_URI, "name_string=? AND transactions_details_id=?", new String[]{tagDeletionList.get(i), mTransactionId});
+            }
+
+            // Do the insertion
+            updatedValues = new ContentValues();
+            for (int i = 0; i < tagInsertionList.size(); i++) {
+                updatedValues.put(TransactionTagModel.KEY_NAME, tagInsertionList.get(i));
+                updatedValues.put(TransactionTagModel.KEY_TRANSACTION_DETAILS_ID, mTransactionId);
+            }
+            getContentResolver().insert(TransactionTagProvider.CONTENT_URI, updatedValues);
         } catch (Exception e) {
 
         }
@@ -299,6 +350,12 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
                     while (transactionCursor.moveToNext()) {
                         mTransactionTagSuggestionsList.add(transactionCursor.getString(transactionCursor.getColumnIndex(TransactionTagModel.KEY_NAME)));
                     }
+                    transactionCursor.close();
+                    transactionCursor = TransactionEditActivity.this.getContentResolver().query(Uri.parse(TransactionTagProvider.CONTENT_URI + "/transaction_detail/" + mTransactionId), null, null, null, null);
+                    mInitialTransactionTagList = new ArrayList<String>();
+                    while (transactionCursor.moveToNext()) {
+                        mInitialTransactionTagList.add(transactionCursor.getString(transactionCursor.getColumnIndex(TransactionTagModel.KEY_NAME)));
+                    }
                 } finally {
                     transactionCursor.close();
                 }
@@ -320,7 +377,8 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
             ((EditText) findViewById(R.id.tran_metadata)).setText(mInitialTransactionDetailState.transactionMetadata);
             ((Button) findViewById(R.id.tran_date_btn)).setText((new SimpleDateFormat("dd/MM/yyyy")).format(mTransactionDate));
             ((Button) findViewById(R.id.tran_time_btn)).setText((new SimpleDateFormat("HH:mm")).format(mTransactionDate));
-            ((MultiAutoCompleteTextView) findViewById(R.id.transaction_edit_categories_tv)).setAdapter(new ArrayAdapter<String>(TransactionEditActivity.this, android.R.layout.simple_dropdown_item_1line, mTransactionTagSuggestionsList));
+            mTransactionTagsTextView.setText(android.text.TextUtils.join(", ", mInitialTransactionTagList));
+            mTransactionTagsTextView.setAdapter(new ArrayAdapter<String>(TransactionEditActivity.this, android.R.layout.simple_dropdown_item_1line, mTransactionTagSuggestionsList));
         }
     }
 

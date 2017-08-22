@@ -73,7 +73,7 @@ public class TransactionTagModel {
     /**
      * Deletes a transaction tag in the table
      */
-    public static long deleteTransactionTag(SQLiteDatabase db, String selection, String[] selectionArgs) {
+    public static int deleteTransactionTag(SQLiteDatabase db, String selection, String[] selectionArgs) {
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 }

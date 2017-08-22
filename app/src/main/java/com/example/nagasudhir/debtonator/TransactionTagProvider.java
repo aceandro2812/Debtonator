@@ -26,7 +26,7 @@ public class TransactionTagProvider extends ContentProvider {
      */
     private static final int TRANSACTION_TAGS = 1;
     private static final int TRANSACTION_TAG = 2;
-    private static final int TRANSACTION_TAG_BY_TRANSACTION_DETAIL = 2;
+    private static final int TRANSACTION_TAG_BY_TRANSACTION_DETAIL = 3;
 
     private static final UriMatcher uriMatcher;
 
@@ -80,7 +80,7 @@ public class TransactionTagProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        return TransactionTagModel.deleteTransactionTag(mAppDB, selection, selectionArgs);
     }
 
     @Override
