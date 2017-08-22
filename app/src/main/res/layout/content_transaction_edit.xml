@@ -18,7 +18,7 @@
         android:text="Description"
         app:layout_constraintBottom_toBottomOf="@+id/tran_description"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteX="8dp" />
+        android:layout_marginStart="8dp" />
 
     <EditText
         android:id="@+id/tran_description"
@@ -28,10 +28,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
+        android:hint="Transaction Description"
         android:inputType="textPersonName"
-        android:text="Transaction Description"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/textView2"
         app:layout_constraintRight_toRightOf="parent"
@@ -41,17 +41,19 @@
         android:id="@+id/tran_add_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_green_dark"
-        android:drawableLeft="@android:drawable/ic_menu_add"
-        android:drawableStart="@android:drawable/ic_menu_add"
+        android:drawableLeft="@drawable/ic_add_black_24dp"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_add_black_24dp"
+        android:gravity="left|center_vertical"
         android:onClick="addTranBtn"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:text="ADD"
-        android:textAlignment="textStart"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tran_date_btn"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,13 +62,13 @@
         android:id="@+id/tran_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="#FF0000"
-        android:drawableLeft="@android:drawable/ic_menu_delete"
-        android:drawableStart="@android:drawable/ic_menu_delete"
+        android:drawableLeft="@drawable/ic_delete_24dp"
+        android:drawableStart="@drawable/ic_delete_24dp"
         android:onClick="tranDeleteBtn"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:text="Delete"
         android:textAlignment="textStart"
         android:textColor="@android:color/white"
@@ -78,7 +80,6 @@
         android:id="@+id/tran_date_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
         android:layout_marginTop="8dp"
         android:background="#004E63"
         android:onClick="showDatePickerDialog"
@@ -97,22 +98,23 @@
         android:text="Notes"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/tran_metadata"
-        app:layout_constraintRight_toLeftOf="@+id/tran_metadata" />
+        app:layout_constraintRight_toLeftOf="@+id/tran_metadata"
+        android:layout_marginEnd="8dp" />
 
     <MultiAutoCompleteTextView
         android:id="@+id/tran_metadata"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:hint="Transaction Notes"
         android:maxLines="3"
-        android:text="Transaction Notes"
         android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="@+id/tran_description"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tran_description" />
+        app:layout_constraintTop_toBottomOf="@+id/tran_description"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
         android:id="@+id/tran_summary_btn"
@@ -156,24 +158,22 @@
         android:id="@+id/tran_contr_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/tran_summary_btn"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tran_metadata"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/transaction_edit_categories_tv" />
 
     <Button
         android:id="@+id/tran_time_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
         android:layout_marginTop="8dp"
         android:background="#004E63"
         android:onClick="showTimePickerDialog"
@@ -183,5 +183,30 @@
         app:layout_constraintRight_toLeftOf="@+id/tran_delete"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="xx:xx" />
+
+    <TextView
+        android:id="@+id/transaction_edit_categories_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Categories"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/transaction_edit_categories_tv"
+        app:layout_constraintRight_toLeftOf="@+id/transaction_edit_categories_tv" />
+
+    <AutoCompleteTextView
+        android:id="@+id/transaction_edit_categories_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:hint="Add Categories"
+        android:textSize="14sp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/tran_description"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tran_metadata" />
 
 </android.support.constraint.ConstraintLayout>
