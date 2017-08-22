@@ -23,10 +23,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ import static com.example.nagasudhir.debtonator.PersonModel.KEY_USERNAME;
 public class TransactionEditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     ListView mTransactionsContributionsListView;
+    MultiAutoCompleteTextView mTransactionTagsTextView = (MultiAutoCompleteTextView) findViewById(R.id.transaction_edit_categories_tv);
     String mTransactionSetId = null;
     String mTransactionId = null;
     String mTransactionDesc = null;
@@ -50,6 +53,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     String mPrevTranId = null;
     boolean mIsStateSaved = false;
     ArrayList<TransactionContributionListItem> mTransactionContributionsList = new ArrayList<TransactionContributionListItem>();
+    ArrayList<String> mTransactionTagSuggestionsList = new ArrayList<String>();
     TransactionContributionAdapter mTransactionContributionsArrayAdapter;
 
     @Override
@@ -72,6 +76,11 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
 
         // Setting up the Transactions list
         mTransactionsContributionsListView = (ListView) findViewById(R.id.tran_contr_list);
+
+        mTransactionTagsTextView.setThreshold(1);
+
+        mTransactionTagsTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+
         /* Creating a loader for populating listview from sqlite database */
         /* This statement, invokes the method onCreatedLoader() */
         getSupportLoaderManager().initLoader(0, null, this);
@@ -284,6 +293,12 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
                         mNextTranId = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.VARIABLE_NEXT_TRAN_ID));
                         mPrevTranId = transactionCursor.getString(transactionCursor.getColumnIndex(TransactionModel.VARIABLE_PREV_TRAN_ID));
                     }
+                    transactionCursor.close();
+                    transactionCursor = TransactionEditActivity.this.getContentResolver().query(TransactionTagProvider.CONTENT_URI, null, null, null, null);
+                    mTransactionTagSuggestionsList = new ArrayList<String>();
+                    while (transactionCursor.moveToNext()) {
+                        mTransactionTagSuggestionsList.add(transactionCursor.getString(transactionCursor.getColumnIndex(TransactionTagModel.KEY_NAME)));
+                    }
                 } finally {
                     transactionCursor.close();
                 }
@@ -305,6 +320,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
             ((EditText) findViewById(R.id.tran_metadata)).setText(mInitialTransactionDetailState.transactionMetadata);
             ((Button) findViewById(R.id.tran_date_btn)).setText((new SimpleDateFormat("dd/MM/yyyy")).format(mTransactionDate));
             ((Button) findViewById(R.id.tran_time_btn)).setText((new SimpleDateFormat("HH:mm")).format(mTransactionDate));
+            ((MultiAutoCompleteTextView) findViewById(R.id.transaction_edit_categories_tv)).setAdapter(new ArrayAdapter<String>(TransactionEditActivity.this, android.R.layout.simple_dropdown_item_1line, mTransactionTagSuggestionsList));
         }
     }
 
