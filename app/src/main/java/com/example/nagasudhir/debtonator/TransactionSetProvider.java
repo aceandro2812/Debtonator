@@ -24,7 +24,7 @@ public class TransactionSetProvider extends ContentProvider {
      */
     private static final int TRANSACTION_SETS = 1;
     private static final int TRANSACTION_SET = 2;
-    private static final int TRANSACTION_SET_BY_NAME = 2;
+    private static final int TRANSACTION_SET_BY_NAME = 3;
 
     private static final UriMatcher uriMatcher;
 

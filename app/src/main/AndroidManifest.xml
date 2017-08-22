@@ -45,6 +45,11 @@
             android:authorities="com.example.nagasudhir.debtonator.transaction_contribution"
             android:exported="false" />
 
+        <provider
+            android:name=".TransactionTagProvider"
+            android:authorities="com.example.nagasudhir.debtonator.transaction_tag"
+            android:exported="false" />
+
         <activity
             android:name=".TransactionEditActivity"
             android:label="@string/title_activity_transaction_edit"
