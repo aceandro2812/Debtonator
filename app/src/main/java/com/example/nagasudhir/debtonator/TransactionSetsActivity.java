@@ -282,7 +282,16 @@ public class TransactionSetsActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            finish();
+            new AlertDialog.Builder(TransactionSetsActivity.this)
+                    .setTitle("Exit Application")
+                    .setMessage("Are you sure you want to exit ?")
+                    .setNegativeButton("NO", null)
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            // Changes need not to be saved
+                            finish();
+                        }
+                    }).create().show();
         }
     }
 
