@@ -228,7 +228,7 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            loadTranSetsBtn(null);
+            super.onBackPressed();
         }
     }
 
