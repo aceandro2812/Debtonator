@@ -29,6 +29,7 @@ public class Person extends ContentProvider {
     private static final int PERSONS = 1;
     private static final int PERSON = 2;
     private static final int PERSONS_BY_TRANSACTION_SET = 3;
+    private static final int PERSON_DETAIL_BY_TRANSACTION_SET = 4;
 
     private static final UriMatcher uriMatcher;
 
@@ -37,6 +38,7 @@ public class Person extends ContentProvider {
         uriMatcher.addURI(PROVIDER_NAME, "persons", PERSONS);
         uriMatcher.addURI(PROVIDER_NAME, "persons/#", PERSON);
         uriMatcher.addURI(PROVIDER_NAME, "persons/by_transaction_set/#", PERSONS_BY_TRANSACTION_SET);
+        uriMatcher.addURI(PROVIDER_NAME, "persons/#/by_transaction_set/#/*/*", PERSON_DETAIL_BY_TRANSACTION_SET);
     }
 
     /**
@@ -70,6 +72,8 @@ public class Person extends ContentProvider {
             return PersonModel.getTransactionSetPersonsInDetail(mAppDB, uri.getLastPathSegment());
         } else if (uriMatcher.match(uri) == PERSON) {
             return PersonModel.getPersonById(mAppDB, uri.getLastPathSegment());
+        } else if (uriMatcher.match(uri) == PERSON_DETAIL_BY_TRANSACTION_SET) {
+            return PersonModel.getPersonSummaryByTransactionSetId(mAppDB, uri.getPathSegments().get(uri.getPathSegments().size() - 5), uri.getPathSegments().get(uri.getPathSegments().size() - 3), uri.getPathSegments().get(uri.getPathSegments().size() - 2),uri.getLastPathSegment());
         } else {
             return null;
         }
