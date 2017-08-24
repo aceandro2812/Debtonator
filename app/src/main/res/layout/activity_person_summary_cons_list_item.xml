@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/person_summary_transaction_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Transaction"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_consumption" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_consumption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="consumption"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_name"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_contribution" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_contribution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="contribution"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_consumption"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_worth" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_worth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="worth"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_contribution"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_people" />
+    <TextView
+        android:id="@+id/person_summary_transaction_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="num People"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_worth"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

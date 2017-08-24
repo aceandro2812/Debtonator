@@ -44,7 +44,6 @@
             android:name=".TransactionContributionProvider"
             android:authorities="com.example.nagasudhir.debtonator.transaction_contribution"
             android:exported="false" />
-
         <provider
             android:name=".TransactionTagProvider"
             android:authorities="com.example.nagasudhir.debtonator.transaction_tag"
@@ -97,6 +96,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.nagasudhir.debtonator.PersonListActivity" />
+        </activity>
+        <activity
+            android:name=".PersonSummaryActivity"
+            android:label="@string/title_activity_person_summary"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.nagasudhir.debtonator.HomeActivity" />
         </activity>
     </application>
 
