@@ -121,6 +121,8 @@ public class TransactionSetsActivity extends AppCompatActivity
 
         // Create Object and call AsyncTask execute Method
         new LongOperation().execute();
+
+        getSupportActionBar().setTitle(R.string.title_activity_transaction_sets);
     }
 
     // Class with extends AsyncTask class
