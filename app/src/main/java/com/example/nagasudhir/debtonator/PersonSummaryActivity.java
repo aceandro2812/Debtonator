@@ -15,8 +15,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,10 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
     PersonSummaryAdapter mPersonSummaryArrayAdapter;
     String mTransactionSetId = null;
     SharedPreferences mSharedPrefs;
+    String mPersonSummarySortField = "consumption";
+    String mPersonSummarySortOrder = "DESC";
+    Spinner mPersonSummarySortFieldSpinner;
+    Spinner mPersonSummarySortOrderSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,46 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
             }
         });
 
+        mPersonSummarySortFieldSpinner = (Spinner) findViewById(R.id.person_summary_sort_spinner);
+        mPersonSummarySortField = mPersonSummarySortFieldSpinner.getSelectedItem().toString();
+        mPersonSummarySortFieldSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String sortField = parent.getItemAtPosition(pos).toString();
+                switch (sortField){
+                    case "CONTRIBUTION":
+                        mPersonSummarySortField = "contribution";
+                        break;
+                    case "DESCRIPTION":
+                        mPersonSummarySortField = "description";
+                        break;
+                    case "NUM_PEOPLE":
+                        mPersonSummarySortField = "tran_people";
+                        break;
+                    case "TRANSACTION_WORTH":
+                        mPersonSummarySortField = "tran_sum";
+                        break;
+                    default:
+                        mPersonSummarySortField = "consumption";
+                        break;
+                }
+                getSupportLoaderManager().restartLoader(0, null, PersonSummaryActivity.this);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        mPersonSummarySortOrderSpinner = (Spinner) findViewById(R.id.person_summary_asc_spinner);
+        mPersonSummarySortOrder = mPersonSummarySortOrderSpinner.getSelectedItem().toString();
+        mPersonSummarySortOrderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                mPersonSummarySortOrder = parent.getItemAtPosition(pos).toString();
+                getSupportLoaderManager().restartLoader(0, null, PersonSummaryActivity.this);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         FloatingActionButton personViewFab = (FloatingActionButton) findViewById(R.id.person_summary_person_view_fab);
         personViewFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +200,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
      */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-        Uri uri = Uri.parse(Person.CONTENT_URI + "/" + mPersonId + "/by_transaction_set/" + mTransactionSetId + "/consumption/DESC");
+        Uri uri = Uri.parse(Person.CONTENT_URI + "/" + mPersonId + "/by_transaction_set/" + mTransactionSetId + "/" + mPersonSummarySortField + "/" + mPersonSummarySortOrder);
         return new CursorLoader(this, uri, null, null, null, null);
     }
 
@@ -165,6 +211,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
     public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor) {
         // Populate the adapter list items
         try {
+            mPersonSummaryList = new ArrayList<PersonSummaryListItem>();
             try {
                 while (cursor.moveToNext()) {
                     PersonSummaryListItem personSummaryListItem = new PersonSummaryListItem();

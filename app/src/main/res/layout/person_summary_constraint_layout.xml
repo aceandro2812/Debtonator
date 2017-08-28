@@ -19,7 +19,7 @@
 
     <Spinner
         android:id="@+id/person_summary_sort_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
@@ -39,6 +39,81 @@
         app:layout_constraintLeft_toRightOf="@+id/person_summary_sort_spinner"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/person_summary_transaction_name_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="Transaction"
+        android:textSize="12sp"
+        app:layout_constraintHorizontal_weight="0.25"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_consumption_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_sort_spinner" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_consumption_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="Consumption"
+        android:textSize="12sp"
+        app:layout_constraintHorizontal_weight="0.22"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_name_label"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_contribution_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_sort_spinner" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_contribution_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="Contribution"
+        android:textSize="12sp"
+        app:layout_constraintHorizontal_weight="0.22"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_consumption_label"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_worth_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_sort_spinner" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_worth_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="Worth"
+        android:textSize="12sp"
+        app:layout_constraintHorizontal_weight="0.15"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_contribution_label"
+        app:layout_constraintRight_toLeftOf="@+id/person_summary_transaction_people_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_sort_spinner" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_people_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="N_People"
+        android:textSize="12sp"
+        app:layout_constraintHorizontal_weight="0.19"
+        app:layout_constraintLeft_toRightOf="@+id/person_summary_transaction_worth_label"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_sort_spinner" />
+
     <ListView
         android:id="@+id/person_summary_contr_cons_list"
         android:layout_width="0dp"
@@ -50,5 +125,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/person_summary_sort_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_transaction_name_label" />
 </android.support.constraint.ConstraintLayout>

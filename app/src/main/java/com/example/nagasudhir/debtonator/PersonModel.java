@@ -139,12 +139,13 @@ public class PersonModel {
      */
     public static Cursor getPersonSummaryByTransactionSetId(SQLiteDatabase db, String personIdString, String transactionSetIdString, String sortColumn, String sortOrder) {
         String sortColumnInQuery = sortColumn;
-        return db.rawQuery("SELECT transaction_contributions.*, tran_aggr_info.description, people_details.username,(CASE WHEN transaction_contributions.is_consumer = 0 THEN 0 WHEN tran_aggr_info.tran_people = 0 THEN 0 ELSE tran_aggr_info.tran_sum/tran_aggr_info.tran_people END) AS consumption, tran_aggr_info.tran_sum, tran_aggr_info.tran_people \n" +
+        return db.rawQuery("SELECT transaction_contributions.*, tran_aggr_info.description, people_details.username,(CASE WHEN transaction_contributions.is_consumer = 0 THEN 0 WHEN tran_aggr_info.tran_people = 0 THEN 0 ELSE tran_aggr_info.tran_sum/tran_aggr_info.tran_num_consumers END) AS consumption, tran_aggr_info.tran_sum, tran_aggr_info.tran_people \n" +
                 "FROM transaction_contributions \n" +
                 "LEFT OUTER JOIN people_details ON people_details.id = transaction_contributions.people_details_id \n" +
                 "LEFT OUTER JOIN \n" +
                 "(SELECT transactions_details.*, \n" +
                 "SUM(transaction_contributions.contribution) AS tran_sum,\n" +
+                "SUM(transaction_contributions.is_consumer) AS tran_num_consumers, \n" +
                 "COUNT(transaction_contributions.is_consumer) AS tran_people \n" +
                 "FROM transactions_details\n" +
                 "LEFT OUTER JOIN transaction_contributions ON transactions_details.id = transaction_contributions.transactions_details_id\n" +

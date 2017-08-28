@@ -15,6 +15,9 @@
     <string-array name="people_summary_sort_options">
         <item>CONSUMPTION</item>
         <item>CONTRIBUTION</item>
+        <item>DESCRIPTION</item>
+        <item>NUM_PEOPLE</item>
+        <item>TRANSACTION_WORTH</item>
     </string-array>
     <string-array name="people_summary_sort_order_options">
         <item>DESC</item>
