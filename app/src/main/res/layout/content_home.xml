@@ -93,17 +93,20 @@
     <Button
         android:id="@+id/load_tran_sets_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:onClick="loadTranSetsBtn"
-        android:text="LOAD"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="8dp"
+        android:layout_height="40sp"
+        android:layout_marginBottom="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginRight="8dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="loadTranSetsBtn"
+        android:text="LOAD"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_manage_persons"
@@ -127,7 +130,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="8dp"
-        app:backgroundTint="#43A047"
+        app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@+id/tranList"
         app:layout_constraintRight_toRightOf="@+id/tranList"
         app:srcCompat="@drawable/ic_add_black_24dp" />

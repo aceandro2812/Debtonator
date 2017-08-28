@@ -89,7 +89,7 @@ public class PersonModel {
      * Returns all the persons in the table
      */
     public static Cursor getAllPersons(SQLiteDatabase db) {
-        return db.rawQuery("SELECT id AS _id, * FROM people_details", null);
+        return db.rawQuery("SELECT id AS _id, * FROM people_details ORDER BY username COLLATE NOCASE", null);
     }
 
     /**
