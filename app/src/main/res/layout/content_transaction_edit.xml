@@ -32,6 +32,7 @@
         android:ems="10"
         android:hint="Transaction Description"
         android:inputType="textPersonName"
+        android:textSize="14sp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/textView2"
         app:layout_constraintRight_toRightOf="parent"
@@ -40,7 +41,7 @@
     <Button
         android:id="@+id/tran_add_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_green_dark"
         android:drawableLeft="@drawable/ic_add_black_24dp"
@@ -60,7 +61,7 @@
     <Button
         android:id="@+id/tran_delete"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:background="#FF0000"
         android:drawableLeft="@drawable/ic_delete_24dp"
@@ -78,7 +79,7 @@
     <Button
         android:id="@+id/tran_date_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:background="#004E63"
         android:onClick="showDatePickerDialog"
@@ -118,24 +119,24 @@
     <Button
         android:id="@+id/tran_prev_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginBottom="4dp"
         android:onClick="prevTranBtn"
         android:text="Prev"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tran_next_btn" />
 
     <Button
         android:id="@+id/tran_next_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_marginBottom="4dp"
         android:onClick="nextTranBtn"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/tran_prev_btn" />
+        app:layout_constraintLeft_toRightOf="@+id/tran_prev_btn"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ListView
         android:id="@+id/tran_contr_list"
@@ -156,7 +157,7 @@
     <Button
         android:id="@+id/tran_time_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:background="#004E63"
         android:onClick="showTimePickerDialog"
