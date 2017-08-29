@@ -69,10 +69,22 @@ public class PersonEditActivity extends AppCompatActivity {
     * */
     public void savePersonEditsBtn(View v) {
         ContentValues updatePersonContentValues = new ContentValues();
+        String personPhone = ((EditText) findViewById(R.id.person_edit_phone)).getText().toString().trim();
+        String personEmail = ((EditText) findViewById(R.id.person_edit_email)).getText().toString().trim();
+        String personMetadata = ((EditText) findViewById(R.id.person_edit_metadata)).getText().toString().trim();
+        if(personPhone.equals("")){
+            personPhone = null;
+        }
+        if(personEmail.equals("")){
+            personEmail = null;
+        }
+        if(personMetadata.equals("")){
+            personMetadata = null;
+        }
         updatePersonContentValues.put(PersonModel.KEY_USERNAME, ((EditText) findViewById(R.id.person_edit_name)).getText().toString().trim());
-        updatePersonContentValues.put(PersonModel.KEY_PHONE_NUMBER, ((EditText) findViewById(R.id.person_edit_phone)).getText().toString().trim());
-        updatePersonContentValues.put(PersonModel.KEY_EMAIL_ID, ((EditText) findViewById(R.id.person_edit_email)).getText().toString().trim());
-        updatePersonContentValues.put(PersonModel.KEY_METADATA, ((EditText) findViewById(R.id.person_edit_metadata)).getText().toString().trim());
+        updatePersonContentValues.put(PersonModel.KEY_PHONE_NUMBER, personPhone);
+        updatePersonContentValues.put(PersonModel.KEY_EMAIL_ID, personEmail);
+        updatePersonContentValues.put(PersonModel.KEY_METADATA, personMetadata);
         int numPersonsUpdated = PersonEditActivity.this.getContentResolver().update(Uri.parse(Person.CONTENT_URI + "/" + mPersonId), updatePersonContentValues, PersonModel.KEY_ROW_ID + "=?", new String[]{mPersonId});
         if (numPersonsUpdated > 0) {
             Toast.makeText(this, "Details UPDATED!", Toast.LENGTH_SHORT).show();

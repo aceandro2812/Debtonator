@@ -144,6 +144,24 @@ public class HomeActivity extends AppCompatActivity
 
         mPersonsListView.setAdapter(mPersonsAdapter);
 
+        mPersonsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+                String personName = cursor.getString(cursor.getColumnIndexOrThrow(PersonModel.KEY_USERNAME));
+                Toast.makeText(getApplicationContext(), personName, Toast.LENGTH_SHORT).show();
+                String personId = cursor.getString(cursor.getColumnIndexOrThrow("_id"));
+                // pass in row Id to create the Content URI for a single row
+                Intent personViewIntent = new Intent(getBaseContext(), PersonSummaryActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("person_id", personId);
+                bundle.putString("person_name", personName);
+                personViewIntent.putExtras(bundle);
+                startActivity(personViewIntent);
+                finish();
+            }
+        });
+
         FloatingActionButton managePeopleFab = (FloatingActionButton) findViewById(R.id.fab_manage_persons);
         managePeopleFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,16 +289,8 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_import) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_send) {
 
         }

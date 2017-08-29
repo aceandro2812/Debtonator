@@ -55,63 +55,62 @@ public class TransactionContributionAdapter extends ArrayAdapter<TransactionCont
             mViewHolder.isConsumerChkBox = (CheckBox) convertView.findViewById(R.id.tran_is_consumer);
             mViewHolder.personIdTextView = (TextView) convertView.findViewById(R.id.tran_person_id);
             mViewHolder.idTextView = (TextView) convertView.findViewById(R.id.tran_contr_id);
+            mViewHolder.isConsumerChkBox.setOnCheckedChangeListener(this);
+
+            //mViewHolder.contributionEditText.setOnFocusChangeListener(this);
+            //mViewHolder.contributionEditText.setOnEditorActionListener(this);
+            mViewHolder.contributionEditText.addTextChangedListener(new MyTextWatcher(mViewHolder.contributionEditText));
+            mViewHolder.contributionEditText.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // If the event is a key-down event on the "enter" button
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        // Perform action on key press
+                        // Hide the soft Keyboard
+                        InputMethodManager imm = (InputMethodManager) v.getContext()
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                        // Evaluate the infix value of the contribution edit text
+                        final int position = (int) v.getTag(R.id.tran_contribution);
+                        String str = ((EditText) v).getText().toString();
+                        Double contributionValue = 0.0;
+                        try {
+                            contributionValue = Infix.infix(str);
+                        } catch (Exception e) {
+                            // The infix evaluation is not successful so don't do anything
+                            Toast.makeText(mContext, "Invalid Expression", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        String contributionText = contributionValue + "";
+                        if ((contributionValue == Math.floor(contributionValue))) {
+                            // contributionValue is integer type
+                            contributionText = contributionValue.intValue() + "";
+                        }
+
+                        // update the objects list
+                        transactionContributionItemsList.get(position).setContribution(contributionText);
+
+                        // Change the Edit Text
+                        ((EditText) v).setText(contributionText);
+                        ((EditText) v).setSelection(contributionText.length());
+                        return true;
+                    }
+                    return false;
+                }
+            });
             convertView.setTag(mViewHolder);
         } else {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
+        mViewHolder.isConsumerChkBox.setTag(R.id.tran_is_consumer, position);
+        mViewHolder.contributionEditText.setTag(R.id.tran_contribution, position);
         // Fill EditText with the value you have in data source
         mViewHolder.contributionEditText.setText(transactionContributionItemsList.get(position).getContribution());
         mViewHolder.personNameTxtView.setText(transactionContributionItemsList.get(position).getPersonName());
         mViewHolder.isConsumerChkBox.setChecked(transactionContributionItemsList.get(position).isConsumer());
         mViewHolder.personIdTextView.setText(transactionContributionItemsList.get(position).getPersonId());
         mViewHolder.idTextView.setText(transactionContributionItemsList.get(position).getId());
-
-        mViewHolder.isConsumerChkBox.setOnCheckedChangeListener(this);
-        mViewHolder.isConsumerChkBox.setTag(R.id.tran_is_consumer, position);
-
-        //mViewHolder.contributionEditText.setOnFocusChangeListener(this);
-        mViewHolder.contributionEditText.setTag(R.id.tran_contribution, position);
-        //mViewHolder.contributionEditText.setOnEditorActionListener(this);
-        mViewHolder.contributionEditText.addTextChangedListener(new MyTextWatcher(mViewHolder.contributionEditText));
-        mViewHolder.contributionEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    // Hide the soft Keyboard
-                    InputMethodManager imm = (InputMethodManager) v.getContext()
-                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                    // Evaluate the infix value of the contribution edit text
-                    final int position = (int) v.getTag(R.id.tran_contribution);
-                    String str = ((EditText) v).getText().toString();
-                    Double contributionValue = 0.0;
-                    try {
-                        contributionValue = Infix.infix(str);
-                    } catch (Exception e) {
-                        // The infix evaluation is not successful so don't do anything
-                        Toast.makeText(mContext, "Invalid Expression", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                    String contributionText = contributionValue + "";
-                    if ((contributionValue == Math.floor(contributionValue))) {
-                        // contributionValue is integer type
-                        contributionText = contributionValue.intValue() + "";
-                    }
-
-                    // update the objects list
-                    transactionContributionItemsList.get(position).setContribution(contributionText);
-
-                    // Change the Edit Text
-                    ((EditText) v).setText(contributionText);
-                    ((EditText) v).setSelection(contributionText.length());
-                    return true;
-                }
-                return false;
-            }
-        });
         return convertView;
     }
 

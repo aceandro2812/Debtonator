@@ -5,7 +5,7 @@
 * Transaction details model seeds function --done
 * Additional functions in Transaction details model -- done
 * Transaction tags db update script in android script -- done
-* Dynamically set the Person View Activity TitleBar title
+* Dynamically set the Person View Activity TitleBar title -- not done and mostly not possible
 
 ## Links
 * Saving app state using save instance state - https://stackoverflow.com/questions/151777/saving-android-activity-state-using-save-instance-state
