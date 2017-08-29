@@ -2,6 +2,7 @@ package com.example.nagasudhir.debtonator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class PersonSummaryAdapter extends ArrayAdapter<PersonSummaryListItem> {
         mViewHolder.contributionTxtView.setText(df.format(personSummaryItemsList.get(position).getPersonContribution()));
         mViewHolder.transactionWorthTxtView.setText(df.format(personSummaryItemsList.get(position).getTransactionWorth()));
         mViewHolder.numTransactionPeopleTxtView.setText(personSummaryItemsList.get(position).getNumTransactionPeople() + "");
+        mViewHolder.transactionNameTxtView.setTextColor(Color.HSVToColor(new float[]{(360 * position) / personSummaryItemsList.size(), 0.6f, 0.96f}));
         return convertView;
     }
 }
