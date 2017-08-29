@@ -3,6 +3,7 @@ package com.example.nagasudhir.debtonator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,7 +21,15 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PersonSummaryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -69,7 +78,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // Disallow the touch request for parent scroll on touch of child view
-                v.getParent().requestDisallowInterceptTouchEvent(true);
+                v.getParent().requestDisallowInterceptTouchEvent(false);
                 return false;
             }
         });
@@ -79,7 +88,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
         mPersonSummarySortFieldSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 String sortField = parent.getItemAtPosition(pos).toString();
-                switch (sortField){
+                switch (sortField) {
                     case "CONTRIBUTION":
                         mPersonSummarySortField = "contribution";
                         break;
@@ -128,6 +137,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
                 finish();
             }
         });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         /* Creating a loader for populating listview from sqlite database */
@@ -188,11 +198,61 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
     }
 
     /*
-        * Setting binding the contributions list */
+    * * Setting binding the contributions list
+    * */
     private void setUpPersonSummaryListAdapter() {
         mPersonSummaryArrayAdapter = new PersonSummaryAdapter(PersonSummaryActivity.this, R.layout.activity_person_summary_cons_list_item, mPersonSummaryList);
         mPersonSummaryListView.setAdapter(mPersonSummaryArrayAdapter);
         setListViewHeightBasedOnChildren(mPersonSummaryListView);
+    }
+
+    /*
+    * * Setting the pie chart
+    * */
+    private void setUpPersonSummaryPieChart() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        PieChart pieChart = (PieChart) findViewById(R.id.person_summary_pie_chart);
+
+        List<PieEntry> entries = new ArrayList<>();
+        int[] pieColors = new int[mPersonSummaryList.size()];
+        for (int i = 0; i < mPersonSummaryList.size(); i++) {
+            entries.add(new PieEntry(mPersonSummaryList.get(i).getPersonConsumption().floatValue(), mPersonSummaryList.get(i).getTransactionName() + " (" + df.format(mPersonSummaryList.get(i).getPersonConsumption()) + ")"));
+            pieColors[i] = Color.HSVToColor(new float[]{(360 * i) / pieColors.length, 0.6f, 0.96f});
+        }
+
+        PieDataSet set = new PieDataSet(entries, null);
+        set.setColors(pieColors);
+        PieData data = new PieData(set);
+        pieChart.setData(data);
+        Description pieChartDescription = new Description();
+        pieChartDescription.setText("");
+        pieChart.setDescription(pieChartDescription);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setDrawEntryLabels(false);
+        data.setDrawValues(false);
+        pieChart.setTransparentCircleRadius(25f);
+        pieChart.setHoleRadius(35f);
+        pieChart.animateXY(1000, 1000);
+
+        PieChart contributionPieChart = (PieChart) findViewById(R.id.person_summary_contribution_pie_chart);
+
+        entries = new ArrayList<>();
+        for (int i = 0; i < mPersonSummaryList.size(); i++) {
+            entries.add(new PieEntry(mPersonSummaryList.get(i).getPersonContribution().floatValue(), mPersonSummaryList.get(i).getTransactionName() + " (" + df.format(mPersonSummaryList.get(i).getPersonContribution()) + ")"));
+            pieColors[i] = Color.HSVToColor(new float[]{(360 * i) / pieColors.length, 0.6f, 0.96f});
+        }
+
+        set = new PieDataSet(entries, null);
+        set.setColors(pieColors);
+        data = new PieData(set);
+        contributionPieChart.setData(data);
+        contributionPieChart.setDescription(pieChartDescription);
+        contributionPieChart.setDrawHoleEnabled(true);
+        contributionPieChart.setDrawEntryLabels(false);
+        data.setDrawValues(false);
+        contributionPieChart.setTransparentCircleRadius(25f);
+        contributionPieChart.setHoleRadius(35f);
+        contributionPieChart.animateXY(1000, 1000);
     }
 
     /**
@@ -226,6 +286,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
             } finally {
                 cursor.close();
                 setUpPersonSummaryListAdapter();
+                setUpPersonSummaryPieChart();
             }
         } catch (Exception e) {
 
