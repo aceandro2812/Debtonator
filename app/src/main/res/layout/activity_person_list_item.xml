@@ -14,7 +14,7 @@
         android:layout_marginTop="8dp"
         android:text="Person Name"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

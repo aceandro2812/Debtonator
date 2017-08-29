@@ -74,6 +74,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         }
         Intent intent = getIntent();
         mTransactionId = intent.getExtras().getString("transaction_id");
+
         new LongOperation().execute();
 
         // Setting up the Transactions list
@@ -89,6 +90,19 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         getSupportLoaderManager().initLoader(0, null, this);
 
         setupUI(findViewById(R.id.transaction_edit_constraint_layout));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        //savedInstanceState.putString("TransactionId", mTransactionId);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        getSupportLoaderManager().restartLoader(0, null, this);
+
     }
 
     @Override

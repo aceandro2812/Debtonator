@@ -9,7 +9,7 @@
         android:id="@+id/person_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="1dp"
         android:layout_marginTop="8dp"
         android:maxLines="1"
