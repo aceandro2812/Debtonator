@@ -232,6 +232,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
         data.setDrawValues(false);
         pieChart.setTransparentCircleRadius(25f);
         pieChart.setHoleRadius(35f);
+        pieChart.getLegend().setWordWrapEnabled(true);
         pieChart.animateXY(1000, 1000);
 
         PieChart contributionPieChart = (PieChart) findViewById(R.id.person_summary_contribution_pie_chart);
@@ -252,6 +253,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
         data.setDrawValues(false);
         contributionPieChart.setTransparentCircleRadius(25f);
         contributionPieChart.setHoleRadius(35f);
+        contributionPieChart.getLegend().setWordWrapEnabled(true);
         contributionPieChart.animateXY(1000, 1000);
     }
 

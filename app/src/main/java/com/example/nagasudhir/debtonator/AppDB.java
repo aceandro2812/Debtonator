@@ -191,55 +191,95 @@ public class AppDB extends SQLiteOpenHelper {
                 "  WHERE  id = NEW.id; \n" +
                 "END;\n";
         // Inserting seeds into the tables
-        sql += "INSERT INTO `transaction_contributions` VALUES (1,1,3,125.0,0);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (2,1,1,450.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (3,1,4,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (4,1,5,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (5,2,2,1010.0,0);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (6,2,4,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (7,3,2,5000.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (8,3,3,1200.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (12,3,4,10000.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (13,3,1,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (14,3,5,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (15,6,1,182.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (16,6,3,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (17,6,4,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (18,6,5,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (19,7,4,69.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (20,8,1,20.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (21,8,2,150.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (22,9,1,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (23,9,2,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (24,9,3,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (25,9,4,0.0,1);\n" +
-                "INSERT INTO `transaction_contributions` VALUES (26,9,5,326.0,1);\n" +
-                "INSERT INTO `transactions_details` VALUES (1,1,'electricity bill','elec bill','2017-06-28 17:14:59','2017-06-27 18:16:04','2017-06-27 18:16:04');\n" +
-                "INSERT INTO `transactions_details` VALUES (2,1,'debt','sudhir to naveen','2017-06-28 17:14:59','2017-06-28 16:46:31','2017-06-28 16:46:31');\n" +
-                "INSERT INTO `transactions_details` VALUES (3,1,'trip','trip to mars','2017-06-28 17:14:59','2017-06-28 16:46:49','2017-06-28 16:46:49');\n" +
-                "INSERT INTO `transactions_details` VALUES (6,3,'rice','rice for roommates','2017-07-01 15:15:09','2017-07-01 15:15:09','2017-07-01 15:15:09');\n" +
-                "INSERT INTO `transactions_details` VALUES (7,3,'pasta','just for fun','2017-08-08 15:06:23','2017-08-08 15:06:23','2017-08-08 15:06:23');\n" +
-                "INSERT INTO `transactions_details` VALUES (8,3,'biriyani','party by kishore','2017-08-08 15:06:56','2017-08-08 15:06:56','2017-08-08 15:06:56');\n" +
-                "INSERT INTO `transactions_details` VALUES (9,3,'groceries',NULL,'2017-08-08 15:07:26','2017-08-08 15:07:26','2017-08-08 15:07:26');\n" +
-                "INSERT INTO `transaction_tags` VALUES (1,'mandatory',1,'2017-08-08 15:28:26');\n" +
-                "INSERT INTO `transaction_tags` VALUES (2,'room',1,'2017-08-08 15:28:44');\n" +
-                "INSERT INTO `transaction_tags` VALUES (3,'debt',2,'2017-08-08 15:29:02');\n" +
-                "INSERT INTO `transaction_tags` VALUES (4,'luxury',3,'2017-08-08 15:29:17');\n" +
-                "INSERT INTO `transaction_tags` VALUES (5,'partying',3,'2017-08-08 15:29:41');\n" +
-                "INSERT INTO `transaction_tags` VALUES (6,'mandatory',6,'2017-08-08 15:31:24');\n" +
-                "INSERT INTO `transaction_tags` VALUES (7,'groceries',6,'2017-08-08 15:31:40');\n" +
-                "INSERT INTO `transaction_tags` VALUES (8,'room',6,'2017-08-08 15:31:48');\n" +
-                "INSERT INTO `transaction_tags` VALUES (9,'personal',7,'2017-08-08 15:32:06');\n" +
-                "INSERT INTO `transaction_tags` VALUES (10,'party',8,'2017-08-08 15:32:19');\n" +
-                "INSERT INTO `transaction_tags` VALUES (11,'groceries',9,'2017-08-08 15:32:39');\n" +
-                "INSERT INTO `transaction_tags` VALUES (12,'room',9,'2017-08-08 15:32:44');\n" +
-                "INSERT INTO `transaction_sets` VALUES (1,'Aug2017','nothing','2017-06-27 18:13:35','2017-08-08 14:55:50');\n" +
-                "INSERT INTO `transaction_sets` VALUES (3,'Sep2017','new_metadata','2017-07-01 16:17:12','2017-08-08 14:56:03');\n" +
-                "INSERT INTO `people_details` VALUES (1,'SUDHIR','9819679462','nagasudhirpulla@gmail.com','nothing','2017-06-27 18:12:12','2017-07-02 07:55:49');\n" +
-                "INSERT INTO `people_details` VALUES (2,'kishore','9888545242','kishore@gmail.com','na','2017-06-27 18:12:59','2017-06-27 18:13:24');\n" +
-                "INSERT INTO `people_details` VALUES (3,'prashanth','1234567890','prashanth.eeenitw@gmail.com','nothing','2017-06-28 16:42:22','2017-06-28 16:43:36');\n" +
-                "INSERT INTO `people_details` VALUES (4,'aditya','3451842451','adityamahesh810@gmail.com','stupid fellow','2017-06-28 16:43:41','2017-06-28 16:44:55');\n" +
-                "INSERT INTO `people_details` VALUES (5,'naveen','2645542155','kotinaveen@gmail.com','','2017-06-28 16:44:39','2017-06-28 16:45:50');\n";
+        sql += "INSERT INTO transactions_details VALUES (1,1,'Debt','Sudhir to Prashant','2017-08-13 09:48:11','2017-08-13 09:48:11','2017-08-13 09:48:11');\n" +
+                "INSERT INTO transactions_details VALUES (2,1,'Toll Fare','Mumbai to Lonavala','2017-08-13 08:32:00','2017-08-30 07:51:17','2017-08-30 07:51:17');\n" +
+                "INSERT INTO transactions_details VALUES (3,1,'Breakfast','At Mumbai Border','2017-08-13 09:00:00','2017-08-30 07:53:37','2017-08-30 07:53:37');\n" +
+                "INSERT INTO transactions_details VALUES (4,1,'Toll','Mumbai to Lonavala','2017-08-13 09:30:00','2017-08-30 07:56:05','2017-08-30 07:56:05');\n" +
+                "INSERT INTO transactions_details VALUES (5,1,'Diesel',NULL,'2017-08-13 11:00:00','2017-08-30 07:57:59','2017-08-30 07:57:59');\n" +
+                "INSERT INTO transactions_details VALUES (6,1,'Parking','At Bhushi Dam','2017-08-13 12:02:00','2017-08-30 07:59:56','2017-08-30 07:59:56');\n" +
+                "INSERT INTO transactions_details VALUES (7,1,'Pants','Because of rain','2017-08-13 12:58:00','2017-08-30 08:01:51','2017-08-30 08:01:51');\n" +
+                "INSERT INTO transactions_details VALUES (8,1,'Driver DA',NULL,'2017-08-13 13:30:00','2017-08-30 08:03:33','2017-08-30 08:03:33');\n" +
+                "INSERT INTO transactions_details VALUES (9,1,'Lunch',NULL,'2017-08-13 13:45:00','2017-08-30 08:06:12','2017-08-30 08:06:12');\n" +
+                "INSERT INTO transactions_details VALUES (10,1,'Parking',NULL,'2017-08-13 15:30:00','2017-08-30 08:06:53','2017-08-30 08:06:53');\n" +
+                "INSERT INTO transactions_details VALUES (11,1,'Snacks',NULL,'2017-08-13 16:36:00','2017-08-30 08:08:36','2017-08-30 08:08:36');\n" +
+                "INSERT INTO transactions_details VALUES (12,1,'Toll','Return from Lonavala to Mumbai','2017-08-13 18:49:00','2017-08-30 08:10:20','2017-08-30 08:10:20');\n" +
+                "INSERT INTO transactions_details VALUES (13,1,'Car Rent',NULL,'2017-08-13 20:53:00','2017-08-30 08:11:56','2017-08-30 08:11:56');\n" +
+                "INSERT INTO transactions_details VALUES (14,1,'Chicken Biriyani','Maid did not have keys','2017-08-13 21:22:00','2017-08-30 08:14:03','2017-08-30 08:14:03');\n" +
+                "INSERT INTO transactions_details VALUES (15,1,'Veg Biriyani',NULL,'2017-08-13 21:33:00','2017-08-30 08:16:15','2017-08-30 08:16:15');\n" +
+                "INSERT INTO transaction_tags VALUES (1,'debt',1,'2017-08-30 08:17:38');\n" +
+                "INSERT INTO transaction_tags VALUES (2,'travel',2,'2017-08-30 08:17:53');\n" +
+                "INSERT INTO transaction_tags VALUES (3,'food',3,'2017-08-30 08:18:30');\n" +
+                "INSERT INTO transaction_tags VALUES (4,'travel',4,'2017-08-30 08:18:47');\n" +
+                "INSERT INTO transaction_tags VALUES (5,'travel',5,'2017-08-30 08:19:00');\n" +
+                "INSERT INTO transaction_tags VALUES (6,'travel',6,'2017-08-30 08:19:09');\n" +
+                "INSERT INTO transaction_tags VALUES (7,'clothes',7,'2017-08-30 08:19:27');\n" +
+                "INSERT INTO transaction_tags VALUES (8,'travel',8,'2017-08-30 08:19:36');\n" +
+                "INSERT INTO transaction_tags VALUES (9,'food',9,'2017-08-30 08:19:45');\n" +
+                "INSERT INTO transaction_tags VALUES (10,'travel',10,'2017-08-30 08:19:56');\n" +
+                "INSERT INTO transaction_tags VALUES (11,'food',11,'2017-08-30 08:20:06');\n" +
+                "INSERT INTO transaction_tags VALUES (12,'travel',12,'2017-08-30 08:20:19');\n" +
+                "INSERT INTO transaction_tags VALUES (13,'travel',13,'2017-08-30 08:20:30');\n" +
+                "INSERT INTO transaction_tags VALUES (14,'debt',14,'2017-08-30 08:20:49');\n" +
+                "INSERT INTO transaction_tags VALUES (15,'food',14,'2017-08-30 08:21:05');\n" +
+                "INSERT INTO transaction_tags VALUES (16,'personal',15,'2017-08-30 08:21:16');\n" +
+                "INSERT INTO transaction_tags VALUES (17,'food',15,'2017-08-30 08:21:24');\n" +
+                "INSERT INTO transaction_sets VALUES (1,'Example set','A trip to Lonavala','2017-08-30 07:47:38','2017-08-30 07:48:00');\n" +
+                "INSERT INTO transaction_contributions VALUES (1,1,1,500.0,0);\n" +
+                "INSERT INTO transaction_contributions VALUES (2,1,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (3,2,4,35.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (4,2,1,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (5,2,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (6,2,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (7,3,1,172.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (8,3,2,165.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (9,3,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (10,3,4,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (11,4,1,138.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (12,4,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (13,4,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (14,4,4,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (15,5,1,1500.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (16,5,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (17,5,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (18,5,4,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (19,6,1,100.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (20,6,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (21,6,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (22,6,4,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (23,7,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (24,7,4,250.0,0);\n" +
+                "INSERT INTO transaction_contributions VALUES (25,8,4,300.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (26,8,1,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (27,8,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (28,8,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (29,9,4,550.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (30,9,1,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (31,9,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (32,9,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (33,10,4,50.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (34,10,1,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (35,10,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (36,10,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (37,11,4,150.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (38,11,1,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (39,11,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (40,11,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (41,12,1,173.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (42,12,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (43,12,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (44,12,4,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (45,13,2,2000.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (46,13,1,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (47,13,3,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (48,13,4,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (49,14,1,200.0,0);\n" +
+                "INSERT INTO transaction_contributions VALUES (50,14,2,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (51,14,4,0.0,1);\n" +
+                "INSERT INTO transaction_contributions VALUES (52,15,1,150.0,1);\n" +
+                "INSERT INTO people_details VALUES (1,'Sudhir','1234567890','abcd@xyzc.com','Awesome Person','2017-08-30 07:43:04','2017-08-30 07:46:09');\n" +
+                "INSERT INTO people_details VALUES (2,'Prashant','0987654321','xyzc@abcd.com','Good person','2017-08-30 07:43:56','2017-08-30 07:44:45');\n" +
+                "INSERT INTO people_details VALUES (3,'Mastan','4561237890','njslx@ksfn.com','Nerd','2017-08-30 07:44:49','2017-08-30 07:45:57');\n" +
+                "INSERT INTO people_details VALUES (4,'Venky','8521473695',NULL,NULL,'2017-08-30 07:46:13','2017-08-30 07:47:26');\n";
         String[] parts = sql.split(";\\n");
         for (int i = 0; i < parts.length; i++) {
             db.execSQL(parts[i]);
