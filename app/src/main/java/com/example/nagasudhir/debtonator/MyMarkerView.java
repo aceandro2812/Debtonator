@@ -41,7 +41,7 @@ public class MyMarkerView extends MarkerView {
         DecimalFormat df = new DecimalFormat("#.##");
         long currentTimestamp = (int) e.getX() + referenceTimestamp;
 
-        tvContent.setText(df.format(e.getY()) + " @ " + getTimedate(currentTimestamp)); // set the entry-value as the display text
+        tvContent.setText(df.format(e.getY()) + "\n" + e.getData() + "\n" + getTimedate(currentTimestamp)); // set the entry-value as the display text
     }
 
     @Override

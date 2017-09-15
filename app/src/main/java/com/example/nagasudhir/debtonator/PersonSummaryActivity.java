@@ -298,8 +298,9 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
 
         for (int i = 0; i < mPersonSummaryListSortedByTime.size(); i++) {
             try {
-                Date tranDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(mPersonSummaryListSortedByTime.get(i).getTransactionTime());
-                transactionTimeLineEntries.add(new Entry(tranDate.getTime() - refTimeStamp, mPersonSummaryListSortedByTime.get(i).getPersonConsumption().floatValue()));
+                PersonSummaryListItem personSummaryListItem = mPersonSummaryListSortedByTime.get(i);
+                Date tranDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(personSummaryListItem.getTransactionTime());
+                transactionTimeLineEntries.add(new Entry(tranDate.getTime() - refTimeStamp, personSummaryListItem.getPersonConsumption().floatValue(), personSummaryListItem.getTransactionName()));
             } catch (Exception e) {
                 Log.e(PersonSummaryActivity.class.toString(), e.toString());
             }
