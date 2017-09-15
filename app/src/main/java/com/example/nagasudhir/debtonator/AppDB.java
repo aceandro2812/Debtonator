@@ -48,6 +48,7 @@ public class AppDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("PRAGMA foreign_keys=ON;");
         db.execSQL("BEGIN TRANSACTION");
+
         // People table creation sql
         /*
         String sql = "DROP TABLE IF EXISTS people_details;";

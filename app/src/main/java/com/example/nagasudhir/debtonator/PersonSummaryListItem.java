@@ -12,12 +12,13 @@ public class PersonSummaryListItem {
     private Double transactionWorth = null;
     private Double personContribution = null;
     private Double personConsumption = null;
+    private String transactionTime = null;
     private int numTransactionPeople = 0;
 
     public PersonSummaryListItem() {
     }
 
-    public PersonSummaryListItem(String personId, String personName, String transactionId, String transactionName, Double transactionWorth, Double personContribution, Double personConsumption, int numTransactionPeople) {
+    public PersonSummaryListItem(String personId, String personName, String transactionId, String transactionName, Double transactionWorth, Double personContribution, Double personConsumption, int numTransactionPeople, String transactionTime) {
         this.personId = personId;
         this.personName = personName;
         this.transactionId = transactionId;
@@ -26,6 +27,7 @@ public class PersonSummaryListItem {
         this.personContribution = personContribution;
         this.personConsumption = personConsumption;
         this.numTransactionPeople = numTransactionPeople;
+        this.transactionTime = transactionTime;
     }
 
     public String getPersonId() {
@@ -90,5 +92,13 @@ public class PersonSummaryListItem {
 
     public void setNumTransactionPeople(int numTransactionPeople) {
         this.numTransactionPeople = numTransactionPeople;
+    }
+
+    public String getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(String transactionTime) {
+        this.transactionTime = transactionTime;
     }
 }

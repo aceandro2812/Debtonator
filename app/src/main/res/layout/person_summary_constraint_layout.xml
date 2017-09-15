@@ -184,4 +184,25 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/person_summary_contribution_pie_label" />
+
+    <TextView
+        android:id="@+id/person_summary_transaction_timeline_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Consumption Timeline"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintLeft_toLeftOf="@+id/person_summary_contr_cons_list"
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_contribution_pie_chart" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/person_summary_transaction_timeline_chart"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_summary_transaction_timeline_label" />
 </android.support.constraint.ConstraintLayout>

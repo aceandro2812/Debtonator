@@ -12,6 +12,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,14 +22,24 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class PersonSummaryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -234,6 +245,7 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
         pieChart.setHoleRadius(35f);
         pieChart.getLegend().setWordWrapEnabled(true);
         pieChart.animateXY(1000, 1000);
+        pieChart.invalidate();
 
         PieChart contributionPieChart = (PieChart) findViewById(R.id.person_summary_contribution_pie_chart);
 
@@ -255,6 +267,77 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
         contributionPieChart.setHoleRadius(35f);
         contributionPieChart.getLegend().setWordWrapEnabled(true);
         contributionPieChart.animateXY(1000, 1000);
+        contributionPieChart.invalidate();
+    }
+
+    /*
+    * * Setting the Transaction Timeline
+    * */
+    private void setUpPersonSummaryTransactionTimeline() {
+        LineChart tranTimeLineChart = (LineChart) findViewById(R.id.person_summary_transaction_timeline_chart);
+        List<Entry> transactionTimeLineEntries = new ArrayList<Entry>();
+        ArrayList<PersonSummaryListItem> mPersonSummaryListSortedByTime = new ArrayList<PersonSummaryListItem>(mPersonSummaryList);
+        Collections.sort(mPersonSummaryListSortedByTime, new Comparator<PersonSummaryListItem>() {
+            @Override
+            public int compare(PersonSummaryListItem p1, PersonSummaryListItem p2) {
+                try {
+                    return (int) ((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(p1.getTransactionTime()).getTime() - (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(p2.getTransactionTime()).getTime());
+                } catch (ParseException e) {
+                    return 0;
+                }
+            }
+        });
+        long refTimeStamp = 0;
+        try {
+            if (mPersonSummaryListSortedByTime.size() > 0) {
+                refTimeStamp = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(mPersonSummaryListSortedByTime.get(0).getTransactionTime()).getTime();
+            }
+        } catch (ParseException e) {
+
+        }
+
+        for (int i = 0; i < mPersonSummaryListSortedByTime.size(); i++) {
+            try {
+                Date tranDate = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse(mPersonSummaryListSortedByTime.get(i).getTransactionTime());
+                transactionTimeLineEntries.add(new Entry(tranDate.getTime() - refTimeStamp, mPersonSummaryListSortedByTime.get(i).getPersonConsumption().floatValue()));
+            } catch (Exception e) {
+                Log.e(PersonSummaryActivity.class.toString(), e.toString());
+            }
+        }
+        LineDataSet tranTimeLineDataSet = new LineDataSet(transactionTimeLineEntries, null); // add transactionTimeLineEntries to dataset
+        tranTimeLineDataSet.setDrawFilled(true);
+        //tranTimeLineDataSet.setColor(Color.parseColor("#4CAF50"));
+        //tranTimeLineDataSet.setCircleColor(Color.parseColor("#4CAF50"));
+        //tranTimeLineDataSet.setFillColor(Color.parseColor("#4CAF50"));
+        //tranTimeLineDataSet.setValueTextColor(Color.HSVToColor(new float[]{120f, 0.6f, 0.96f}));
+        tranTimeLineDataSet.setDrawCircleHole(false);
+        tranTimeLineDataSet.setDrawValues(false);
+        LineData TranTimeLineData = new LineData(tranTimeLineDataSet);
+        tranTimeLineChart.setData(TranTimeLineData);
+        tranTimeLineChart.getLegend().setEnabled(false);
+        tranTimeLineChart.getDescription().setEnabled(false);
+
+        DayAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(refTimeStamp);
+        XAxis xAxis = tranTimeLineChart.getXAxis();
+        xAxis.setValueFormatter(xAxisFormatter);
+
+        MyMarkerView myMarkerView = new MyMarkerView(getApplicationContext(), R.layout.custom_marker_view, refTimeStamp);
+        tranTimeLineChart.setMarkerView(myMarkerView);
+
+        // enable touch gestures
+        tranTimeLineChart.setTouchEnabled(true);
+
+        // enable scaling and dragging
+        tranTimeLineChart.setDragEnabled(true);
+        tranTimeLineChart.setScaleEnabled(true);
+        // mChart.setScaleXEnabled(true);
+        // mChart.setScaleYEnabled(true);
+
+        tranTimeLineChart.getAxisLeft().setDrawGridLines(false);
+        tranTimeLineChart.getAxisRight().setDrawGridLines(false);
+        tranTimeLineChart.getXAxis().setDrawGridLines(false);
+        //tranTimeLineChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
+        tranTimeLineChart.invalidate();
     }
 
     /**
@@ -283,12 +366,14 @@ public class PersonSummaryActivity extends AppCompatActivity implements LoaderMa
                     personSummaryListItem.setTransactionWorth(cursor.getDouble(cursor.getColumnIndex("tran_sum")));
                     personSummaryListItem.setNumTransactionPeople(cursor.getInt(cursor.getColumnIndex("tran_people")));
                     personSummaryListItem.setTransactionName(cursor.getString(cursor.getColumnIndex(TransactionModel.KEY_DESCRIPTION)));
+                    personSummaryListItem.setTransactionTime(cursor.getString(cursor.getColumnIndex(TransactionModel.KEY_TRANSACTION_TIME)));
                     mPersonSummaryList.add(personSummaryListItem);
                 }
             } finally {
                 cursor.close();
                 setUpPersonSummaryListAdapter();
                 setUpPersonSummaryPieChart();
+                setUpPersonSummaryTransactionTimeline();
             }
         } catch (Exception e) {
 
