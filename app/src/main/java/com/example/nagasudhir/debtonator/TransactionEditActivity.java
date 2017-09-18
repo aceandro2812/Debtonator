@@ -18,6 +18,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -102,7 +103,13 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         getSupportLoaderManager().restartLoader(0, null, this);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.transaction_edit, menu);
+        return true;
     }
 
     @Override
@@ -111,6 +118,9 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 homeBtn(null);
+                return true;
+            case R.id.action_manage_people:
+                managePeopleBtn(null);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -327,8 +337,22 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
             saveChangesToDB();
         }
         // starts a new Intent to open home page
-        Intent HomePageIntent = new Intent(getBaseContext(), HomeActivity.class);
-        startActivity(HomePageIntent);
+        Intent homePageIntent = new Intent(getBaseContext(), HomeActivity.class);
+        startActivity(homePageIntent);
+        finish();
+    }
+
+    /*
+    * When the 'Manage People' button is clicked
+    * */
+    public void managePeopleBtn(View v) {
+        // save the changes
+        if (!mIsStateSaved) {
+            saveChangesToDB();
+        }
+        // starts a new Intent to open home page
+        Intent peoplePageIntent = new Intent(getBaseContext(), PersonListActivity.class);
+        startActivity(peoplePageIntent);
         finish();
     }
 

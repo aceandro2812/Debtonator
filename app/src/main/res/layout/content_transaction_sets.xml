@@ -6,34 +6,37 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.nagasudhir.debtonator.TransactionSetsActivity"
-    tools:showIn="@layout/app_bar_transaction_sets"
+    tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:showIn="@layout/app_bar_transaction_sets">
 
     <ListView
         android:id="@+id/tran_set_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/create_tran_set_btn"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/create_tran_set_btn"
         android:layout_width="0dp"
-        android:layout_height="40sp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:background="@drawable/primary_button"
+        android:minHeight="0dp"
         android:onClick="createTranSetBtn"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:text="New Transaction Set"
         android:textColor="@android:color/white"
         android:textSize="12sp"
