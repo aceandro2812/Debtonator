@@ -87,6 +87,26 @@
         app:layout_constraintTop_toBottomOf="@+id/person_view_email" />
 
     <TextView
+        android:id="@+id/person_view_uuid_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="UUID"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_metadata_label" />
+
+    <TextView
+        android:id="@+id/person_view_uuid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="UUID String"
+        app:layout_constraintLeft_toRightOf="@+id/person_view_uuid_label"
+        app:layout_constraintTop_toBottomOf="@+id/person_view_metadata" />
+
+    <TextView
         android:id="@+id/person_view_created_at_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,7 +114,7 @@
         android:layout_marginTop="8dp"
         android:text="Created At"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/person_view_metadata_label" />
+        app:layout_constraintTop_toBottomOf="@+id/person_view_uuid_label" />
 
     <TextView
         android:id="@+id/person_view_created_at"
@@ -104,7 +124,7 @@
         android:layout_marginTop="8dp"
         android:text="Creation Date Time"
         app:layout_constraintLeft_toRightOf="@+id/person_view_created_at_label"
-        app:layout_constraintTop_toBottomOf="@+id/person_view_metadata" />
+        app:layout_constraintTop_toBottomOf="@+id/person_view_uuid" />
 
     <TextView
         android:id="@+id/person_view_updated_at_label"

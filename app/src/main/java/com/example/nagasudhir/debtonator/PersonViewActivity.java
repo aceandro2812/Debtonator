@@ -20,6 +20,7 @@ public class PersonViewActivity extends AppCompatActivity {
     private String mPersonPhone = null;
     private String mPersonEmail = null;
     private String mPersonMetadata = null;
+    private String mPersonUUID = null;
     private String mPersonCreatedAt = null;
     private String mPersonUpdatedAt = null;
 
@@ -106,9 +107,9 @@ public class PersonViewActivity extends AppCompatActivity {
                         mPersonPhone = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_PHONE_NUMBER));
                         mPersonEmail = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_EMAIL_ID));
                         mPersonMetadata = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_METADATA));
+                        mPersonUUID = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_UUID));
                         mPersonCreatedAt = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_CREATED_AT));
                         mPersonUpdatedAt = personCursor.getString(personCursor.getColumnIndex(PersonModel.KEY_UPDATED_AT));
-
                     }
                 } finally {
                     personCursor.close();
@@ -128,6 +129,7 @@ public class PersonViewActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.person_view_email)).setText(mPersonEmail);
             ((TextView) findViewById(R.id.person_view_phone)).setText(mPersonPhone);
             ((TextView) findViewById(R.id.person_view_metadata)).setText(mPersonMetadata);
+            ((TextView) findViewById(R.id.person_view_uuid)).setText(mPersonUUID);
             ((TextView) findViewById(R.id.person_view_created_at)).setText(mPersonCreatedAt);
             ((TextView) findViewById(R.id.person_view_updated_at)).setText(mPersonUpdatedAt);
         }

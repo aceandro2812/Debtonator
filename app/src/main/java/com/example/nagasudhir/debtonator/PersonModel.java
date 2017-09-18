@@ -37,10 +37,15 @@ public class PersonModel {
     /**
      * Field 6 of the table people_details, stores the phone number of the customer
      */
-    public static final String KEY_CREATED_AT = "created_at";
+    public static final String KEY_UUID = "uuid";
 
     /**
      * Field 7 of the table people_details, stores the phone number of the customer
+     */
+    public static final String KEY_CREATED_AT = "created_at";
+
+    /**
+     * Field 8 of the table people_details, stores the phone number of the customer
      */
     public static final String KEY_UPDATED_AT = "updated_at";
 
@@ -59,30 +64,22 @@ public class PersonModel {
      */
     public static void insertSeeds(SQLiteDatabase db) {
         // Create some rows
+        //todo accommodate uuids
         PersonPojo[] persons = new PersonPojo[5];
-        persons[0] = new PersonPojo("SUDHIR", "9819679462", "nagasudhirpulla@gmail.com", "nothing");
-        persons[1] = new PersonPojo("kishore", "9888545242", "kishore@gmail.com", "na");
-        persons[2] = new PersonPojo("prashanth", "1234567890", "prashanth.eeenitw@gmail.com", "nothing");
-        persons[3] = new PersonPojo("aditya", "3451842451", "adityamahesh810@gmail.com", "stupid fellow");
-        persons[4] = new PersonPojo("naveen", "2645542155", "kotinaveen@gmail.com", "");
+        persons[0] = new PersonPojo("SUDHIR", "9819679462", "nagasudhirpulla@gmail.com", "nothing", "");
+        persons[1] = new PersonPojo("kishore", "9888545242", "kishore@gmail.com", "na", "");
+        persons[2] = new PersonPojo("prashanth", "1234567890", "prashanth.eeenitw@gmail.com", "nothing", "");
+        persons[3] = new PersonPojo("aditya", "3451842451", "adityamahesh810@gmail.com", "stupid fellow", "");
+        persons[4] = new PersonPojo("naveen", "2645542155", "kotinaveen@gmail.com", "", "");
         for (int i = 0; i < persons.length; i++) {
             ContentValues initialValues = new ContentValues();
             initialValues.put(KEY_USERNAME, persons[i].getUsername());
             initialValues.put(KEY_PHONE_NUMBER, persons[i].getPhone());
             initialValues.put(KEY_EMAIL_ID, persons[i].getEmail());
             initialValues.put(KEY_METADATA, persons[i].getMetadata());
+            initialValues.put(KEY_UUID, persons[i].getUuid());
             db.insert(TABLE_NAME, null, initialValues);
         }
-        /*sql = "INSERT INTO `people_details` VALUES (1,'SUDHIR','9819679462','nagasudhirpulla@gmail.com','nothing',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);";
-        db.execSQL(sql);
-        sql = "INSERT INTO `people_details` VALUES (2,'kishore','9888545242','kishore@gmail.com','na',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);";
-        db.execSQL(sql);
-        sql = "INSERT INTO `people_details` VALUES (3,'prashanth','1234567890','prashanth.eeenitw@gmail.com','nothing',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);";
-        db.execSQL(sql);
-        sql = "INSERT INTO `people_details` VALUES (4,'aditya','3451842451','adityamahesh810@gmail.com','stupid fellow',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);";
-        db.execSQL(sql);
-        sql = "INSERT INTO `people_details` VALUES (5,'naveen','2645542155','kotinaveen@gmail.com','',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);";
-        db.execSQL(sql);*/
     }
 
     /**

@@ -35,6 +35,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -221,6 +222,7 @@ public class HomeActivity extends AppCompatActivity
         insertValues.put(TransactionModel.KEY_METADATA, "");
         insertValues.put(TransactionModel.KEY_TRANSACTION_SET_ID, mTransactionSetId);
         insertValues.put(TransactionModel.KEY_TRANSACTION_TIME, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
+        insertValues.put(TransactionModel.KEY_UUID, UUID.randomUUID().toString());
         Uri newTransactionUri = getContentResolver().insert(TransactionProvider.CONTENT_URI, insertValues);
         int newTransactionId = -1;
         try {

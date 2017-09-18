@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.UUID;
+
 public class PersonCreateActivity extends AppCompatActivity {
 
     static final int PICK_CONTACT = 1;
@@ -176,6 +178,7 @@ public class PersonCreateActivity extends AppCompatActivity {
         String personPhone = ((EditText) findViewById(R.id.person_create_phone)).getText().toString().trim();
         String personEmail = ((EditText) findViewById(R.id.person_create_email)).getText().toString().trim();
         String personMetadata = ((EditText) findViewById(R.id.person_create_metadata)).getText().toString().trim();
+        String uuid = UUID.randomUUID().toString();
         if (personPhone.equals("")) {
             personPhone = null;
         }
@@ -190,6 +193,7 @@ public class PersonCreateActivity extends AppCompatActivity {
         personCreateContentValues.put(PersonModel.KEY_PHONE_NUMBER, personPhone);
         personCreateContentValues.put(PersonModel.KEY_EMAIL_ID, personEmail);
         personCreateContentValues.put(PersonModel.KEY_METADATA, personMetadata);
+        personCreateContentValues.put(PersonModel.KEY_UUID, uuid);
         Uri newPersonUri = PersonCreateActivity.this.getContentResolver().insert(Person.CONTENT_URI, personCreateContentValues);
         int newPersonId = -1;
         try {

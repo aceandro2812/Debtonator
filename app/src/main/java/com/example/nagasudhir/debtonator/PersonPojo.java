@@ -10,6 +10,7 @@ public class PersonPojo {
     String phone = null;
     String email = null;
     String metadata = null;
+    String uuid = null;
     String created = null;
     String updated = null;
 
@@ -53,6 +54,14 @@ public class PersonPojo {
         this.metadata = metadata;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     public String getCreated() {
         return created;
     }
@@ -69,10 +78,11 @@ public class PersonPojo {
         this.updated = updated;
     }
 
-    public PersonPojo(String username, String phone, String email, String metadata) {
+    public PersonPojo(String username, String phone, String email, String metadata, String uuid) {
         this.username = username;
         this.phone = phone;
         this.email = email;
         this.metadata = metadata;
+        this.uuid = uuid;
     }
 }

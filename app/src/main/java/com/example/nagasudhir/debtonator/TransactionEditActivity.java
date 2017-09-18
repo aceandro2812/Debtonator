@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.example.nagasudhir.debtonator.PersonModel.KEY_USERNAME;
 
@@ -307,6 +308,7 @@ public class TransactionEditActivity extends AppCompatActivity implements Loader
         insertValues.put(TransactionModel.KEY_METADATA, "");
         insertValues.put(TransactionModel.KEY_TRANSACTION_SET_ID, mTransactionSetId);
         insertValues.put(TransactionModel.KEY_TRANSACTION_TIME, (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
+        insertValues.put(TransactionModel.KEY_UUID, UUID.randomUUID().toString());
         Uri newTransactionUri = getContentResolver().insert(TransactionProvider.CONTENT_URI, insertValues);
         int newTransactionId = -1;
         try {

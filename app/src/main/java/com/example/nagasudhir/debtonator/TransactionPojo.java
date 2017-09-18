@@ -10,13 +10,15 @@ public class TransactionPojo {
     String description = null;
     String metadata = null;
     String transaction_time = null;
+    String uuid = null;
     String created_at = null;
     String updated_at = null;
 
-    public TransactionPojo(String transaction_sets_id, String description, String transaction_time) {
+    public TransactionPojo(String transaction_sets_id, String description, String transaction_time, String uuid) {
         this.transaction_sets_id = transaction_sets_id;
         this.description = description;
         this.transaction_time = transaction_time;
+        this.uuid = uuid;
     }
 
     public String getId() {
@@ -57,6 +59,14 @@ public class TransactionPojo {
 
     public void setTransaction_time(String transaction_time) {
         this.transaction_time = transaction_time;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getCreated_at() {

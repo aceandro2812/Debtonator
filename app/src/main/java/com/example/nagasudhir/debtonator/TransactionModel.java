@@ -17,6 +17,7 @@ public class TransactionModel {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_METADATA = "metadata";
     public static final String KEY_TRANSACTION_TIME = "transaction_time";
+    public static final String KEY_UUID = "uuid";
     public static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_UPDATED_AT = "updated_at";
     public static final String VARIABLE_TRANSACTION_SUM = "tran_sum";
