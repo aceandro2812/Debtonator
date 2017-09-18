@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * Created by Nagasudhir on 8/4/2017.
@@ -97,5 +101,152 @@ public class TransactionSetModel {
      */
     public static int deleteTransactionSet(SQLiteDatabase db, String selection, String[] selectionArgs) {
         return db.delete(TABLE_NAME, selection, selectionArgs);
+    }
+
+    /*
+    * Export Transaction Set Information to a json object Array
+    * */
+    public static JSONObject exportTransactionSets(SQLiteDatabase db, String[] transactionSetIds) {
+        JSONObject exportJSON = new JSONObject();
+        // creating the transaction sets json array
+        JSONArray transactionSetsJSONArray = new JSONArray();
+        try {
+            for (int i = 0; i < transactionSetIds.length; i++) {
+                String transactionSetId = transactionSetIds[i];
+                Cursor transactionSetCursor = TransactionSetModel.getTransactionSetById(db, transactionSetId);
+                if (transactionSetCursor.moveToNext()) {
+                    String transactionSetName = transactionSetCursor.getString(transactionSetCursor.getColumnIndex(TransactionSetModel.KEY_NAME_STRING));
+                    String transactionSetMetadata = transactionSetCursor.getString(transactionSetCursor.getColumnIndex(TransactionSetModel.KEY_METADATA));
+                    String transactionSetCreatedAt = transactionSetCursor.getString(transactionSetCursor.getColumnIndex(TransactionSetModel.KEY_CREATED_AT));
+                    String transactionSetUpdatedAt = transactionSetCursor.getString(transactionSetCursor.getColumnIndex(TransactionSetModel.KEY_UPDATED_AT));
+                    // creating the transaction set JSON member
+                    JSONObject transactionSetJSON = new JSONObject();
+                    transactionSetJSON.put(TransactionSetModel.KEY_ROW_ID, transactionSetId);
+                    transactionSetJSON.put(TransactionSetModel.KEY_NAME_STRING, transactionSetName);
+                    transactionSetJSON.put(TransactionSetModel.KEY_METADATA, transactionSetMetadata);
+                    transactionSetJSON.put(TransactionSetModel.KEY_CREATED_AT, transactionSetCreatedAt);
+                    transactionSetJSON.put(TransactionSetModel.KEY_UPDATED_AT, transactionSetUpdatedAt);
+
+                    // creating the transaction details JSON Array for the transaction set
+                    JSONArray transactionDetailsJSONArray = new JSONArray();
+
+                    // get all the transaction detail ids of the transaction set
+                    Cursor transactionDetailsCursor = TransactionModel.getTransactionByTransactionSetId(db, transactionSetId);
+
+                    while (transactionDetailsCursor.moveToNext()) {
+                        // creating the transaction details object
+                        JSONObject transactionDetailJSON = new JSONObject();
+
+                        String transactionDetailId = transactionDetailsCursor.getString(transactionDetailsCursor.getColumnIndex(TransactionModel.KEY_ROW_ID));
+                        String transactionDetailDescription = transactionDetailsCursor.getString(transactionDetailsCursor.getColumnIndex(TransactionModel.KEY_DESCRIPTION));
+                        String transactionDetailMetadata = transactionDetailsCursor.getString(transactionDetailsCursor.getColumnIndex(TransactionModel.KEY_METADATA));
+                        String transactionDetailTime = transactionDetailsCursor.getString(transactionDetailsCursor.getColumnIndex(TransactionModel.KEY_TRANSACTION_TIME));
+                        String transactionDetailUuid = transactionDetailsCursor.getString(transactionDetailsCursor.getColumnIndex(TransactionModel.KEY_UUID));
+                        String transactionDetailCreatedAt = transactionDetailsCursor.getString(transactionDetailsCursor.getColumnIndex(TransactionModel.KEY_CREATED_AT));
+                        String transactionDetailUpdatedAt = transactionDetailsCursor.getString(transactionDetailsCursor.getColumnIndex(TransactionModel.KEY_UPDATED_AT));
+                        transactionDetailJSON.put(TransactionModel.KEY_ROW_ID, transactionDetailId);
+                        transactionDetailJSON.put(TransactionModel.KEY_DESCRIPTION, transactionDetailDescription);
+                        transactionDetailJSON.put(TransactionModel.KEY_METADATA, transactionDetailMetadata);
+                        transactionDetailJSON.put(TransactionModel.KEY_TRANSACTION_TIME, transactionDetailTime);
+                        transactionDetailJSON.put(TransactionModel.KEY_UUID, transactionDetailUuid);
+                        transactionDetailJSON.put(TransactionModel.KEY_CREATED_AT, transactionDetailCreatedAt);
+                        transactionDetailJSON.put(TransactionModel.KEY_UPDATED_AT, transactionDetailUpdatedAt);
+
+                        //create the transaction contributions JSON array for the transaction detail
+                        JSONArray transactionContributionsJSONArray = new JSONArray();
+
+                        // get all the transaction contribution rows for the transaction detail Id
+                        Cursor transactionContributionsCursor = TransactionContributionModel.getTransactionContributionsByTransactionDetailId(db, transactionDetailId);
+
+                        while (transactionContributionsCursor.moveToNext()) {
+                            // creating the transaction contributions object
+                            JSONObject transactionContributionJSON = new JSONObject();
+
+                            String transactionContributionId = transactionContributionsCursor.getString(transactionContributionsCursor.getColumnIndex(TransactionContributionModel.KEY_ROW_ID));
+                            String transactionContributionPersonId = transactionContributionsCursor.getString(transactionContributionsCursor.getColumnIndex(TransactionContributionModel.KEY_PERSON_ID));
+                            String transactionContribution = transactionContributionsCursor.getString(transactionContributionsCursor.getColumnIndex(TransactionContributionModel.KEY_CONTRIBUTION));
+                            String transactionContributionIsConsumer = transactionContributionsCursor.getString(transactionContributionsCursor.getColumnIndex(TransactionContributionModel.KEY_IS_CONSUMER));
+                            transactionContributionJSON.put(TransactionContributionModel.KEY_ROW_ID, transactionContributionId);
+                            transactionContributionJSON.put(TransactionContributionModel.KEY_PERSON_ID, transactionContributionPersonId);
+                            transactionContributionJSON.put(TransactionContributionModel.KEY_CONTRIBUTION, transactionContribution);
+                            transactionContributionJSON.put(TransactionContributionModel.KEY_IS_CONSUMER, transactionContributionIsConsumer);
+
+                            // pushing single transaction contribution info into the transaction contributions JSON array
+                            transactionContributionsJSONArray.put(transactionContributionJSON);
+                        }
+                        // setting all the transaction contribution details array into the transaction detail JSON
+                        transactionDetailJSON.put("contributions", transactionContributionsJSONArray);
+
+                        //create the transaction tags JSON array for the transaction detail
+                        JSONArray transactionTagsJSONArray = new JSONArray();
+
+                        // get all the transaction tags rows for the transaction detail Id
+                        Cursor transactionTagsCursor = TransactionTagModel.getTransactionTagsByTransactionDetailId(db, transactionDetailId);
+
+                        while (transactionTagsCursor.moveToNext()) {
+                            // creating the transaction tag object
+                            JSONObject transactionTagJSON = new JSONObject();
+
+                            String transactionTagId = transactionTagsCursor.getString(transactionTagsCursor.getColumnIndex(TransactionTagModel.KEY_ROW_ID));
+                            String transactionTag = transactionTagsCursor.getString(transactionTagsCursor.getColumnIndex(TransactionTagModel.KEY_NAME));
+                            transactionTagJSON.put(TransactionTagModel.KEY_ROW_ID, transactionTagId);
+                            transactionTagJSON.put(TransactionTagModel.KEY_NAME, transactionTag);
+
+                            // pushing single transaction tag info into the transaction tags JSON array
+                            transactionTagsJSONArray.put(transactionTagJSON);
+                        }
+                        // setting all the transaction tags details array into the transaction detail JSON
+                        transactionDetailJSON.put("tags", transactionTagsJSONArray);
+
+                        // pushing the single transaction detail information into the array
+                        transactionDetailsJSONArray.put(transactionDetailJSON);
+                    }
+
+                    // setting all the transaction set details array into the transaction set JSON
+                    transactionSetJSON.put("transactions", transactionDetailsJSONArray);
+
+                    //pushing the transaction set json object to the transaction sets json array
+                    transactionSetsJSONArray.put(transactionSetJSON);
+
+                }
+            }
+            // set all the transaction sets to the exports JSON
+            exportJSON.put("transaction_sets", transactionSetsJSONArray);
+
+            // creating the transactions people JSON Array for all the transaction sets
+            JSONArray peopleJSONArray = new JSONArray();
+
+            // get all the people rows for all the transaction set Ids
+            Cursor peopleCursor = PersonModel.getPersonsByTransactionSetsIds(db, transactionSetIds);
+
+            while (peopleCursor.moveToNext()) {
+                // creating the person object
+                JSONObject personJSON = new JSONObject();
+                String personId = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_ROW_ID));
+                String personUsername = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_USERNAME));
+                String personPhone = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_PHONE_NUMBER));
+                String personEmail = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_EMAIL_ID));
+                String personMetadata = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_METADATA));
+                String personUuid = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_UUID));
+                String personCreatedAt = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_CREATED_AT));
+                String personUpdatedAt = peopleCursor.getString(peopleCursor.getColumnIndex(PersonModel.KEY_UPDATED_AT));
+                personJSON.put(PersonModel.KEY_ROW_ID, personId);
+                personJSON.put(PersonModel.KEY_USERNAME, personUsername);
+                personJSON.put(PersonModel.KEY_PHONE_NUMBER, personPhone);
+                personJSON.put(PersonModel.KEY_EMAIL_ID, personEmail);
+                personJSON.put(PersonModel.KEY_METADATA, personMetadata);
+                personJSON.put(PersonModel.KEY_UUID, personUuid);
+                personJSON.put(PersonModel.KEY_CREATED_AT, personCreatedAt);
+                personJSON.put(PersonModel.KEY_UPDATED_AT, personUpdatedAt);
+
+                // pushing single person info into the people JSON array
+                peopleJSONArray.put(personJSON);
+            }
+            // set all the people to the exports JSON
+            exportJSON.put("people", peopleJSONArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return exportJSON;
     }
 }

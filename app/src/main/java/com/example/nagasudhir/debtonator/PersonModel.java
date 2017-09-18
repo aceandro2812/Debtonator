@@ -3,6 +3,7 @@ package com.example.nagasudhir.debtonator;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 /**
  * Created by Nagasudhir on 8/3/2017.
@@ -80,6 +81,17 @@ public class PersonModel {
             initialValues.put(KEY_UUID, persons[i].getUuid());
             db.insert(TABLE_NAME, null, initialValues);
         }
+    }
+
+    /**
+     * Returns all the persons in the table
+     */
+    public static Cursor getPersonsByTransactionSetsIds(SQLiteDatabase db, String[] transactionSetsIds) {
+        String[] questionMarkStrings = new String[transactionSetsIds.length];
+        for (int i = 0; i < transactionSetsIds.length; i++) {
+            questionMarkStrings[i] = "?";
+        }
+        return db.rawQuery("SELECT * FROM people_details WHERE id IN (SELECT DISTINCT people_details_id FROM transaction_contributions WHERE transactions_details_id IN (SELECT id FROM transactions_details WHERE transaction_sets_id IN (" + TextUtils.join(",", questionMarkStrings) + ")))", transactionSetsIds);
     }
 
     /**

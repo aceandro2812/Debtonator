@@ -66,7 +66,7 @@ public class TransactionContributionProvider extends ContentProvider {
         } else if (uriMatcher.match(uri) == TRANSACTION_CONTRIBUTION) {
             return TransactionContributionModel.getTransactionContributionById(mAppDB, uri.getLastPathSegment());
         } else if (uriMatcher.match(uri) == TRANSACTION_CONTRIBUTION_BY_TRANSACTION_DETAIL) {
-            return TransactionContributionModel.getTransactionContributionByTransactionDetailId(mAppDB, uri.getLastPathSegment());
+            return TransactionContributionModel.getTransactionContributionsWithPersonInfoByTransactionDetailId(mAppDB, uri.getLastPathSegment());
         } else if (uriMatcher.match(uri) == TRANSACTION_CONTRIBUTION_UPSERT) {
             return TransactionContributionModel.upsertTransactionContribution(mAppDB, selectionArgs[0], selectionArgs[1], selectionArgs[2], selectionArgs[3]);
         } else {

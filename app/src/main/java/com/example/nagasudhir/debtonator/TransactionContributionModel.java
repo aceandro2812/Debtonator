@@ -45,9 +45,9 @@ public class TransactionContributionModel {
     }
 
     /**
-     * Returns transaction contributions in the table by its transactions_details_id
+     * Returns transaction contributions with Person Info in the table by its transactions_details_id
      */
-    public static Cursor getTransactionContributionByTransactionDetailId(SQLiteDatabase db, String idString) {
+    public static Cursor getTransactionContributionsWithPersonInfoByTransactionDetailId(SQLiteDatabase db, String idString) {
         return db.rawQuery("SELECT people_details.id AS _id, \n" +
                 "       people_details.username, \n" +
                 "       tran_contributions.* \n" +
@@ -61,6 +61,13 @@ public class TransactionContributionModel {
                 "ORDER  BY tran_contributions.contribution DESC, \n" +
                 "          tran_contributions.is_consumer DESC, \n" +
                 "          people_details.username COLLATE NOCASE ASC", new String[]{idString});
+    }
+
+    /**
+     * Returns transaction contributions in the table by its transactions_details_id
+     */
+    public static Cursor getTransactionContributionsByTransactionDetailId(SQLiteDatabase db, String idString) {
+        return db.rawQuery("SELECT * FROM transaction_contributions WHERE transactions_details_id = ?", new String[]{idString});
     }
 
     /**
