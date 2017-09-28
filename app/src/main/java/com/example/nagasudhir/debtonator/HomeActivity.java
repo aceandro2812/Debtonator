@@ -313,6 +313,11 @@ public class HomeActivity extends AppCompatActivity
             } else {
                 exportTransactionSetFile();
             }
+        } else if (id == R.id.nav_people) {
+            // Finish this activity and start the Transaction Set List Displaying Activity
+            Intent personListIntent = new Intent(getBaseContext(), PersonListActivity.class);
+            startActivity(personListIntent);
+            finish();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

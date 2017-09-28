@@ -327,9 +327,14 @@ public class TransactionSetsActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_import) {
-            // Handle the camera action
+            Toast.makeText(this, "Feature yet to be added", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_send) {
-
+            Toast.makeText(this, "Feature yet to be added", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_people) {
+            // Finish this activity and start the Transaction Set List Displaying Activity
+            Intent personListIntent = new Intent(getBaseContext(), PersonListActivity.class);
+            startActivity(personListIntent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

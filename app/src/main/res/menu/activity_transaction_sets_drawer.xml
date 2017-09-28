@@ -3,7 +3,14 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_people"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="People" />
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_import"
             android:icon="@drawable/ic_insert_drive_file_24dp"
             android:title="Import" />
     </group>
